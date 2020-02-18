@@ -14,3 +14,4 @@ My master's dissertation
 - Dissertation is [/writeup/main/main.pdf](/writeup/main/main.pdf)
 - Dissertation source is [/writeup/main/main.tex](/writeup/main/main.tex)
 - Build file is [/writeup/build](/writeup/build)
+- Results, including plots and tables, are kept in [/results/](/results/)
