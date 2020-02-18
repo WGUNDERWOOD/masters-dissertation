@@ -2,6 +2,8 @@
 
 My master's dissertation
 
+TODO: add R code and datasets
+
 ## Details
 - Title: Motif-Based Spectral Clustering of Weighted Directed Networks
 - Author: William G Underwood
