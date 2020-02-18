@@ -1,0 +1,48 @@
+\chapter{Introduction}
+
+% Importance of network analysis in the modern world
+Networks are ubiquitous in modern society; from the internet and online blogs to protein interactions and human migration, we are surrounded by inherently connected structures~\cite{kolaczyk2014statistical}.
+The mathematical and statistical analysis of networks is therefore a very important area of modern research, with applications in a diverse range of fields including biology~\cite{albert2005scale}, chemistry~\cite{jacob2018statistics}, physics~\cite{newman2008physics} and sociology~\cite{adamic2005political}.
+
+
+% Clustering is a core technique
+A common problem in network analysis is that of \emph{clustering}~\cite{schaeffer2007graph}.
+Network clustering refers to the division of a network into several parts so that objects in the same part are similar, while those in different parts are dissimilar.
+
+
+%Spectral methods are good
+Spectral methods for network clustering have a long and successful history~\cite{cheeger1969lower,donath1972algorithms,guattery1995performance}, and have become increasingly popular in recent years.
+These techniques exhibit many attractive properties including generality, ease of implementation and scalability~\cite{von2007tutorial}. 
+
+
+% Shortcomings of spectral methods
+However traditional spectral methods have shortcomings, particularly involving their inability to consider higher-order network structures~\cite{benson2016higher}, and their insensitivity to edge direction~\cite{DirectedClustImbCuts}. These weaknesses can lead to unsatisfactory results, especially when working with directed networks.
+Motif-based spectral methods have proven more effective for clustering directed networks on the basis of higher-order structures~\cite{tsourakakis2017scalable}, with the introduction of the \emph{motif adjacency matrix} (MAM). 
+
+
+% Problems we want to solve
+In this dissertation we will explore motif-based spectral clustering methods with a focus on addressing these shortcomings for weighted directed networks.
+Our main contributions include a collection of new matrix-based formulae for MAMs on weighted directed networks, and a motif-based approach for clustering bipartite networks. We also provide comprehensive experimental results both from synthetic data (stochastic block models) and from real-world network data.
+
+
+
+
+
+
+\section*{Dissertation layout}
+
+In Chapter~\ref{chap:graphs} we describe our graph-theoretic framework which provides a natural model for real-world weighted directed networks.
+We define motifs and instances, and then state and prove new matrix-based formulae for MAMs.
+%
+In Chapter~\ref{chap:spectral} we provide a summary of random-walk spectral clustering and discuss techniques for cluster extraction and evaluation.
+We state the algorithms for both traditional and motif-based spectral clustering.
+%
+In Chapter~\ref{chap:motif} we introduce directed stochastic block models (DSBMs), a family of generative models for directed networks, and evaluate the performance of motif-based clustering both on synthetic data and on real data (US Political Blogs network, US Migration network).
+%
+In Chapter~\ref{chap:bipartite} we propose a motif-based approach for clustering bipartite graphs and introduce bipartite stochastic block models (BSBMs), a family of generative models for bipartite networks. We again provide experimental results both on synthetic data and on real data (American Revolution network, Unicode Languages network).
+%
+Finally in Chapter~\ref{chap:conclusions} we present our conclusions, along with a discussion about limitations and potential extensions of our work.
+
+
+
+

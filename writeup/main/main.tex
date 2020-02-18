@@ -1,0 +1,98 @@
+% PREAMBLE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt,
+%	,draft
+]{ociamthesis}
+
+\include{packages}
+\include{preamble}
+\include{glossary}
+
+% DOCUMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%TC:ignore
+% give sufficient line spacing for comment markup
+\baselineskip=18pt plus1pt
+
+% set how many section levels get numbers and appear in the contents
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+
+% Do not hyphenate short words
+\lefthyphenmin4
+\righthyphenmin4
+
+\pagenumbering{Alph}
+%TC:endignore
+\maketitle                
+%TC:ignore
+%\newpage\null\thispagestyle{empty}\newpage
+%TC:endignore
+\include{abstract}       
+%TC:ignore
+%\newpage\null\thispagestyle{empty}\newpage
+
+
+\pagenumbering{arabic}
+\begin{romanpages}          
+
+\tableofcontents        
+
+\newpage
+\listoffigures        
+
+\newpage
+\listoftables
+
+\begingroup	
+	\let\cleardoublepage\relax
+	\let\clearpage\relax
+	\printglossary[title=Abbreviations, style=mystyle]
+\endgroup
+
+\end{romanpages}           
+
+
+
+% Fancy headers
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\fancyhead[RO,LE]{\itshape{\nouppercase{Chapter \thechapter : \leftmark}}}
+
+%TC:endignore
+\include{introduction}
+\include{chapter_graphs}
+\include{chapter_spectral}
+\include{chapter_motif}
+\include{chapter_bipartite}
+\include{conclusions}
+%TC:ignore
+
+% enable appendix numbering format and include appendices
+\appendix
+\fancyhead[RO,LE]{\itshape{\nouppercase{Appendix \thechapter : \leftmark}}}
+
+%TC:endignore
+\include{appendix_proofs}
+\include{appendix_matrices}
+\include{appendix_notes}
+%TC:ignore
+
+% add the bibliography to the contents page
+\pagestyle{empty}
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{References}
+% change bibliography name to References
+\renewcommand{\bibname}{References}
+\pagestyle{fancy}
+\fancyhead[RO,LE]{\itshape{\nouppercase{References}}}
+\bibliography{refs}        % use a bibtex bibliography file refs.bib
+\bibliographystyle{abbrv}  % use the plain bibliography style
+%\newpage\null\thispagestyle{empty}\newpage
+%\newpage\null\thispagestyle{empty}\newpage
+
+%TC:endignore
+\end{document}

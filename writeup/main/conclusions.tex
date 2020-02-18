@@ -1,0 +1,32 @@
+\chapter{Conclusion} \label{chap:conclusions}
+
+
+With this dissertation we have introduced a graph-theoretic framework for analysis of weighted directed networks, and presented new matrix-based formulae for MAMs (Chapter~\ref{chap:graphs}).
+We have summarised the method of random-walk spectral clustering and shown how it can be used with motif-based techniques (Chapter~\ref{chap:spectral}).
+We have presented results from the application of a motif-based method both to synthetic data (DSBMs) and to real data (US Political Blogs network, US Migration network). We have demonstrated that this technique outperforms traditional spectral clustering methods on several occasions (Chapter~\ref{chap:motif}).
+We have introduced a motif-based spectral method for clustering bipartite graphs and presented results both from synthetic data (BSBMs) and from real data (American Revolution network, Unicode Languages network).
+
+
+In particular we have shown that motif-based spectral clustering is a valuable tool for clustering weighted directed networks, which is scalable and easy to implement.
+Superior performance has been demonstrated especially with asymmetric DSBMs in Section~\ref{sec:motif_asymm_dsbms}, and with the US Political Blogs network in Section~\ref{sec:motif_polblogs}.
+
+
+\section*{Limitations}
+
+There are limitations to our work.
+While our matrix-based formulae for MAMs are simple to implement and moderately scalable, they are computationally unwieldy for large networks (see Section~\ref{sec:notes_computation} for details).
+As mentioned in~\cite{benson2016higher}, fast triangle enumeration algorithms~\cite{demeyer2013ISMA,wernicke2006efficient,wernicke2006fanmod} offer increased performance, at the expense of methodological simplicity.
+Another shortcoming of the matrix-based formulae is that unlike motif detection algorithms such as~\cite{wernicke2006fanmod}, they do not extend to motifs on four or more vertices.
+
+
+\section*{Future work}
+
+There is plenty of scope for methodological investigation related to our work.
+Simple extensions could involve an analysis of the differences between clustering methods based on functional and structural MAMs respectively.
+One could also experiment with the effects of replacing the random-walk Laplacian with the unnormalised Laplacian or symmetric normalised Laplacian \cite{von2007tutorial}.
+Similarly one might try replacing Ncut with RatioCut \cite{hagen1992new}. We note that although our methods apply to weighted graphs, we have only discussed unweighted DSBMs. Therefore it would be interesting to investigate weighted DSBMs (perhaps following the exponential family method detailed in \cite{aicher2013adapting}) and to use them for evaluation of motif-based spectral clustering procedures.
+
+Further experimental work is also desirable. We would like to conduct experiments on more real data, and suggest that collaboration networks such as~\cite{snap:astro}, and bipartite preference networks such as~\cite{icon:movie} could be interesting.
+Comparison with other clustering methods could also be insightful; the Hermitian matrices method in~\cite{DirectedClustImbCuts}, the PageRank method in~\cite{yin2017local} and \textsc{Tectonic} from~\cite{tsourakakis2017scalable} may give suitable benchmarks for performance.
+
+

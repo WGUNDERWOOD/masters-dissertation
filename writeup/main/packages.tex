@@ -1,0 +1,67 @@
+%TC:ignore
+
+% PDF Version
+\pdfminorversion=7
+
+% General typesetting
+\usepackage[utf8]{inputenc}
+\usepackage[british]{babel}
+\usepackage{microtype}
+\usepackage[table]{xcolor}
+
+% Lengths
+\usepackage{etoolbox}
+\usepackage{setspace}
+
+% Mathematics typesetting
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{dsfont}
+
+% Headers
+\usepackage{fancyhdr}
+\fancyhead{}
+\renewcommand{\headrulewidth}{0pt}
+
+% Lof, LoT
+\usepackage{tocloft}
+\setlength{\cftfigindent}{0pt}
+\setlength{\cfttabindent}{0pt}
+
+% Algorithms
+\usepackage[boxruled,
+			linesnumbered,
+			commentsnumbered,
+			algochapter,
+			]{algorithm2e}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Draft options
+\usepackage{ifdraft}
+\ifoptiondraft{
+    \usepackage{draftwatermark}
+    \SetWatermarkText{DRAFT}
+    \SetWatermarkScale{6}
+    \SetWatermarkColor[rgb]{1,0.9,0.9}
+    \usepackage{showframe}
+    \usepackage{layout}
+}{}
+\usepackage[obeyDraft]{todonotes}
+
+
+% Hyperlinks
+\usepackage[plainpages=false,draft=false
+			,hidelinks
+			]{hyperref}
+\usepackage{cite}
+
+% Glossary
+\usepackage[nopostdot,nonumberlist]{glossaries}
+
+%TC:endignore

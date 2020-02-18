@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# Get writeup directory
+writeup=$PWD
+echo
+
+# build tikz
+echo tikz
+for dir in $writeup/tikz/*/; do
+	cd $dir
+	for filename in *.tex; do
+		echo $'\t' $filename
+		pdflatex $filename
+	done
+	cd $writeup/main
+done
+
+# pdflatex
+echo pdflatex
+cd $writeup/main
+pdflatex ./main.tex
+
+# makeindex
+echo makeindex
+makeindex main.glo -q -s main.ist -t main.glg -o main.gls
+
+# bibtex
+echo bibtex
+bibtex ./main.aux > ./refs.log
+
+# texcount
+echo texcount
+texcount -relaxed -inc -0 -sum=1,1,1,0,0,0,0 -q main.tex > ./texcount.txt 2> /dev/null
+texcount -relaxed -inc -html -q main.tex > ./texcount.html 2> /dev/null
+
+# pdflatex
+echo pdflatex
+pdflatex ./main.tex
+
+# pdflatex
+echo pdflatex
+pdflatex ./main.tex

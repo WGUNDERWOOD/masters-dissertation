@@ -1,0 +1,357 @@
+\chapter{Proofs and Examples}\label{chap:appendix_proofs}
+
+\section{Proofs}
+
+
+
+
+
+
+\begin{prf}[Proposition~\ref{prop:motif_adj_matrix_formula}, MAM formula] \label{proof:motif_adj_matrix_formula}
+%
+Consider $(1)$. We sum over functional instances $\ca{M} \cong \ca{H} \leq \ca{G}$ such that $\{i,j\} \in \ca{A(H)}$.
+This is equivalent to summing over $\{k_2, \ldots, k_{m-1}\} \subseteq \ca{V}$ and $\sigma \in S_\ca{M,A}^\sim$, such that $k_u$ are all distinct and
+%
+$$ (u,v) \in \ca{E_M} \implies (k_{\sigma u}, k_{\sigma v}) \in \ca{E}\,. \qquad (\dagger) $$
+%
+This is because the vertex set $\{k_2, \ldots, k_{m-1}\} \subseteq \ca{V}$ indicates which vertices are present in the instance $\ca{H}$, and $\sigma$ describes the mapping from $\ca{V_M}$ onto those vertices: $u \mapsto k_{\sigma u}$. We take $\sigma \in S_\ca{M,A}^\sim$ to ensure that $\{i,j\} \in \ca{A(H)}$ (since $i=k_1, \ j=k_m$), and that instances are counted exactly once.
+The condition $(\dagger)$ is to check that $\ca{H}$ is a functional instance of $\ca{M}$ in $\ca{G}$. Hence
+%
+\begin{align*}
+	M^\mathrm{func}_{ij} &= \frac{1}{|\ca{E_M}|} \sum_{\ca{M} \cong \ca{H} \leq \ca{G}} \bb{I} \big\{ \{i,j\} \in \ca{A}(\ca{H}) \big\} \sum_{e \in \ca{E_H}} W(e) \\
+%	
+	&=  \frac{1}{|\ca{E_M}|} \sum_{\{ k_2, \ldots, k_{m-1} \}} \sum_{\sigma \in S_\ca{M,A}^\sim} \bb{I} \big\{ k_u \textrm{ all distinct}, \, (\dagger) \big\} \sum_{e \in \ca{E_H}} W(e)\,.
+\end{align*}
+%
+For the first term, by conditioning on the types of edge in $\ca{E_M}$:
+\begin{align*}
+%
+	\bb{I} \big\{ k_u \textrm{ all distinct}, \, (\dagger) \big\}
+	&= \prod_{\ca{E}_\ca{M}^0} \bb{I} \{ k_{\sigma u} \neq k_{\sigma v} \} \\
+	& \qquad \times \prod_{\ca{E}_\ca{M}^\mathrm{s}} \bb{I} \{ (k_{\sigma u}, k_{\sigma v}) \in \ca{E} \} \\
+	& \qquad \times \prod_{\ca{E}_\ca{M}^\mathrm{d}} \bb{I} \{(k_{\sigma u}, k_{\sigma v}) \in \ca{E} \textrm{ and } (k_{\sigma v}, k_{\sigma u}) \in \ca{E}\} \\
+%
+	&= \prod_{\ca{E}_\ca{M}^0} (J_\mathrm{n})_{k_{\sigma u},k_{\sigma v}}
+	\prod_{\ca{E}_\ca{M}^\mathrm{s}} J_{k_{\sigma u},k_{\sigma v}}
+	\prod_{\ca{E}_\ca{M}^\mathrm{d}} (J_\mathrm{d})_{k_{\sigma u},k_{\sigma v}} \\
+%
+	&= J^\mathrm{func}_{\mathbf{k},\sigma}\,.
+%
+\end{align*}
+%
+Assuming $\big\{ k_u \textrm{ all distinct}, \, (\dagger) \big\}$, the second term is
+%
+\begin{align*}
+%
+	\sum_{e \in \ca{E_H}} W(e)
+	&= \sum_{\ca{E}_\ca{M}^\mathrm{s}} W((k_{\sigma u},k_{\sigma v}))
+	+ \sum_{\ca{E}_\ca{M}^\mathrm{d}} \big( W((k_{\sigma u},k_{\sigma v})) + W((k_{\sigma v},k_{\sigma u})) \big) \\
+%
+	&= \sum_{\ca{E}_\ca{M}^\mathrm{s}} G_{k_{\sigma u},k_{\sigma v}}
+	+ \sum_{\ca{E}_\ca{M}^\mathrm{d}} (G_\mathrm{d})_{k_{\sigma u},k_{\sigma v}} \\
+%
+	&= G^\mathrm{func}_{\mathbf{k},\sigma}
+\end{align*}
+%
+as required. For $(2)$, we simply change $(\dagger)$ to $(\ddagger)$ to check that an instance is a \emph{structural} instance:
+%
+$$ (u,v) \in \ca{E_M} \iff (k_{\sigma u}, k_{\sigma v}) \in \ca{E} \qquad (\ddagger) $$
+%
+Now for the first term:
+%
+\begin{align*}
+%
+	\bb{I} \big\{ k_u \textrm{ all distinct}, \, (\ddagger) \big\}
+	&= \prod_{\ca{E}_\ca{M}^0} \bb{I} \{(k_{\sigma u}, k_{\sigma v}) \notin \ca{E} \textrm{ and } (k_{\sigma v}, k_{\sigma u}) \notin \ca{E}\} \\
+	& \qquad \times \prod_{\ca{E}_\ca{M}^\mathrm{s}} \bb{I} \{(k_{\sigma u}, k_{\sigma v}) \in \ca{E} \textrm{ and } (k_{\sigma v}, k_{\sigma u}) \notin \ca{E}\} \\
+	& \qquad \times \prod_{\ca{E}_\ca{M}^\mathrm{d}} \bb{I} \{(k_{\sigma u}, k_{\sigma v}) \in \ca{E} \textrm{ and } (k_{\sigma v}, k_{\sigma u}) \in \ca{E}\} \\
+%
+	&= \prod_{\ca{E}_\ca{M}^0} (J_\mathrm{0})_{k_{\sigma u},k_{\sigma v}}
+	\prod_{\ca{E}_\ca{M}^\mathrm{s}} (J_\mathrm{s})_{k_{\sigma u},k_{\sigma v}}
+	\prod_{\ca{E}_\ca{M}^\mathrm{d}} (J_\mathrm{d})_{k_{\sigma u},k_{\sigma v}} \\
+%
+	&= J^\mathrm{struc}_{\mathbf{k},\sigma}\,.
+%
+\end{align*}
+%
+Assuming $\big\{ k_u \textrm{ all distinct}, \, (\ddagger) \big\}$, the second term is
+%
+\begin{align*}
+%
+	\sum_{e \in \ca{E_H}} W(e)
+	&= \sum_{\ca{E}_\ca{M}^\mathrm{s}} W((k_{\sigma u},k_{\sigma v}))
+	+ \sum_{\ca{E}_\ca{M}^\mathrm{d}} \big( W((k_{\sigma u},k_{\sigma v})) + W((k_{\sigma v},k_{\sigma u})) \big) \\
+%
+	&= \sum_{\ca{E}_\ca{M}^\mathrm{s}} (G_\mathrm{s})_{k_{\sigma u},k_{\sigma v}}
+	+ \sum_{\ca{E}_\ca{M}^\mathrm{d}} (G_\mathrm{d})_{k_{\sigma u},k_{\sigma v}} \\
+%
+	&= G^\mathrm{struc}_{\mathbf{k},\sigma}\,.
+\end{align*}
+
+\hfill $\square$
+\end{prf}
+
+
+
+
+
+
+
+
+
+
+
+\pagebreak
+
+\begin{prf}[Proposition~\ref{prop:motif_adj_matrix_computation}, Complexity of MAM formula] \label{proof:motif_adj_matrix_computation}
+Suppose ${m \leq 3}$ and consider $M^\mathrm{func}$. The adjacency and indicator matrices of $\ca{G}$ are
+%
+\begin{equation*}
+	\begin{aligned}[c]
+		&(1) \quad J = \bb{I} \{ G>0 \}\,, \\
+		&(2) \quad J_0 = \bb{I} \{ G + G^\top = 0 \} \circ J_\mathrm{n}\,, \\
+		&(3) \quad J_\mathrm{s} = J - J_\mathrm{d}\,, \\
+		&(4) \quad G_\mathrm{d} = (G + G^\top) \circ J_\mathrm{d} \,,
+	\end{aligned}
+	\hspace*{2cm}
+	\begin{aligned}[c]
+		&(5) \quad J_\mathrm{n} = \bb{I} \{I_{n \times n} = 0 \}\,, \\
+		&(6) \quad J_\mathrm{d} = J \circ J^\top\,, \\
+		&(7) \quad G_\mathrm{s} = G \circ J_\mathrm{s}\,, \\
+		&
+	\end{aligned}
+\end{equation*}
+%
+and are computed using four additions and four element-wise multiplications. $J^\mathrm{func}_{\mathbf{k},\sigma}$ is a product of at most three factors, and $G^\mathrm{func}_{\mathbf{k},\sigma}$ contains at most three summands, so
+%
+$$ \sum_{k_2 \in \ca{V}} J^\mathrm{func}_{\mathbf{k},\sigma} \ G^\mathrm{func}_{\mathbf{k},\sigma} $$
+%
+is expressible as a sum of at most three matrices, each of which is constructed with at most one matrix multiplication (where $\{k_{\sigma r},k_{\sigma s}\} \neq \{i,j\}$) and one entry-wise multiplication (where $\{k_{\sigma r},k_{\sigma s}\} = \{i,j\}$). This is repeated for each $\sigma \in S_\ca{M,A}^\sim$ (at most six times) and the results are summed. Calculations are identical for  $M^\mathrm{struc}$.
+
+\hfill $\square$
+\end{prf}
+
+
+
+
+
+
+
+
+
+
+\begin{prf}[Proposition~\ref{prop:coll_expa_formulae}, Colliders and expanders in bipartite graphs] \label{proof:coll_expa_formulae}
+%
+Consider (1) and the collider motif $\ca{M}_\mathrm{coll}$. Since $\ca{G}$ is bipartite, $M_\mathrm{coll}^\mathrm{func} = M_\mathrm{coll}^\mathrm{struc} = \vcentcolon M_\mathrm{coll}$, and by Table~\ref{tab:motif_adj_mat_table},  $M_\mathrm{coll} = \frac{1}{2} J_\mathrm{n} \circ (J G^\top + G J^\top)$. Hence
+%
+\begin{align*}
+	(M_\mathrm{coll})_{ij} &= \frac{1}{2} (J_\mathrm{n})_{ij} \ (J G^\top + G J^\top)_{ij} \\
+	&= \bb{I}\{i \neq j\} \sum_{k \in \ca{V}} \ \frac{1}{2} \Big(J_{ik} G_{jk} + G_{ik} J_{jk} \Big) \\
+	&= \bb{I}\{i \neq j\} \sum_{k \in \ca{V}} \ \frac{1}{2} \,\bb{I} \, \Big\{ (i,k),(j,k) \in \ca{E} \Big\} \Big[W((i,k)) + W((j,k))\Big] \\
+	&= \bb{I} \{i \neq j\} \hspace*{-0.4cm} \sum_{\substack{k \in \ca{D} \\ (i,k), (j,k) \in \ca{E}}} \hspace*{-0.2cm} \frac{1}{2} \Big[ W((i,k)) + W((j,k)) \Big]\,.
+\end{align*}
+%
+Similarly for the expander motif, $M_\mathrm{expa} = \frac{1}{2} J_\mathrm{n} \circ (J^\top G + G^\top J)$ so
+%
+\begin{align*}
+	(M_\mathrm{expa})_{ij} &= \frac{1}{2} (J_\mathrm{n})_{ij} \ (J^\top G + G^\top J)_{ij} \\
+	&= \bb{I} \{i \neq j\} \hspace*{-0.4cm} \sum_{\substack{k \in \ca{S} \\ (k,i), (k,j) \in \ca{E}}} \hspace*{-0.2cm} \frac{1}{2} \Big[ W((k,i)) + W((k,j)) \Big]\,.
+\end{align*}
+%
+\hfill $\square$
+\end{prf}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Examples}
+
+
+
+
+
+
+\begin{example}[Functional and structural instances] \label{ex:instances}
+Let $\ca{G}=(\ca{V,E})$ be the graph with $\ca{V} = \{ 1,2,3,4 \}$ and	$\ca{E} = \{ (1,2),(1,3),(1,4),(2,3),(3,4),(4,3) \}$. Let $(\ca{M,A})$ be the anchored motif with $\ca{V_M} = \{1,2,3\}$, $\ca{E_M} = \{(1,2),(1,3),(2,3)\}$ and $\ca{A} = \{1,3\}$ as defined in Figure \ref{fig:instance_example_1}.
+%
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7,draft=false]{../tikz/instance_example_1/instance_example_1.pdf}
+\caption{The specified graph $\ca{G}$ and anchored motif $\ca{M}$}
+\label{fig:instance_example_1}
+\end{figure}
+%
+There are three functional instances of $\ca{M}$ in $\ca{G}$, shown in Figure~\ref{fig:instance_example_2}. However there is just one structural instance of $\ca{M}$ in $\ca{G}$, given by $\ca{H}_1$. This is because the double edge $3 \leftrightarrow 4$ in $\ca{G}$ prevents the subgraphs on $\{1,3,4\}$ from being induced subgraphs.
+%
+\begin{align*}
+\ca{H}_1 &: \quad \ca{V}_1 = \{ 1,2,3 \} ; \quad \ca{E}_1 = \{ (1,2) , (2,3) , (1,3) \} ; \quad \ca{A(H}_1) =  \big\{\{1,3\}\big\}\,, \\
+\ca{H}_2 &: \quad \ca{V}_2 = \{ 1,3,4 \} ; \quad \ca{E}_2 = \{ (1,3) , (1,4) , (3,4) \} ; \quad \ca{A(H}_2) =  \big\{\{1,4\}\big\}\,, \\
+\ca{H}_3 &: \quad \ca{V}_3 = \{ 1,3,4 \} ; \quad \ca{E}_3 = \{ (1,3) , (1,4) , (4,3) \} ; \quad \ca{A(H}_3) =  \big\{\{1,3\}\big\}\,. 
+\end{align*}
+%
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7,draft=false]{../tikz/instance_example_2/instance_example_2.pdf}
+\caption{Functional instances $\ca{H}_1,\ca{H}_2$ and $\ca{H}_3$}
+\label{fig:instance_example_2}
+\end{figure}
+
+\end{example}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{example}[Motif adjacency matrices] \label{ex:motif_adj_matrices}
+Let $\ca{G}$ and $\ca{(M,A)}$ be as in Example~\ref{ex:instances}, and suppose $\ca{G}$ has weight map $W((i,j)) \vcentcolon = i + j$. Then using Definition~\ref{def:motif_adj_matrices} directly, the functional and structural MAMs of $\ca{(M,A)}$ in $\ca{G}$ are respectively
+
+\vspace*{0.2cm}
+$$ %
+	M^\mathrm{func} = \begin{pmatrix}
+		0  & 0  & 28 & 16 \\
+		0  & 0  & 0  & 0  \\
+		28 & 0  & 0  & 0  \\
+		16 & 0  & 0  & 0
+	\end{pmatrix} \,,
+	\qquad
+	M^\mathrm{struc} = \begin{pmatrix}
+		0  & 0  & 12 & 0  \\
+		0  & 0  & 0  & 0  \\
+		12 & 0  & 0  & 0  \\
+		0  & 0  & 0  & 0
+	\end{pmatrix}\,.
+$$
+\end{example}
+
+
+
+
+
+
+
+
+
+
+\pagebreak
+
+\begin{example}[Calculating an explicit formula for an MAM] \label{ex:motif_adj_calc}
+Consider the functional MAM of the simple motif $\ca{M}_6$ (Figure~\ref{fig:M6}).
+%
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7,draft=false]{../tikz/M6/M6.pdf}
+\caption{The motif $\ca{M}_6$}
+\label{fig:M6}
+\end{figure}
+%
+We use Equation (1) in Proposition~\ref{prop:motif_adj_matrix_formula}. Firstly, $m = |\ca{V_M}| = 3$ and $|\ca{E_M}| = 4$. The automorphism group of $\ca{M}_6$ has order 2, corresponding to swapping vertices 1 and 3. Hence $|S_\ca{M,A}^\sim| = |S_m| / 2 = 6/2 = 3$, and suitable representatives from $S_\ca{M,A}^\sim$ are
+
+$$ S_\ca{M,A}^\sim = \left\{
+%
+\sigma_1 =
+\begin{pmatrix}
+1 & 2 & 3 \\
+1 & 2 & 3
+\end{pmatrix},
+%
+\sigma_2 =
+\begin{pmatrix}
+1 & 2 & 3 \\
+2 & 1 & 3
+\end{pmatrix},
+%
+\sigma_3 =
+\begin{pmatrix}
+1 & 2 & 3 \\
+1 & 3 & 2
+\end{pmatrix}
+\right\}\,. \vspace*{0.2cm}$$
+%
+So by Proposition~\ref{prop:motif_adj_matrix_formula}, with $i=k_1$ and $j=k_3$, and writing $k$ for $k_2$:
+
+$$
+M^\mathrm{func}_{ij} = \frac{1}{4} \sum_{\sigma \in S_\ca{M,A}^\sim} \ \sum_{k \in \ca{V}} J^\mathrm{func}_{\mathbf{k},\sigma} \ G^\mathrm{func}_{\mathbf{k},\sigma}
+$$
+%
+where since there are no missing edges in $\ca{M}_6$:
+%
+\begin{align*}
+%
+	J^\mathrm{func}_{\mathbf{k},\sigma}
+	&= \prod_{\ca{E}_\ca{M}^\mathrm{s}} J_{k_{\sigma u},k_{\sigma v}}
+	\prod_{\ca{E}_\ca{M}^\mathrm{d}} (J_\mathrm{d})_{k_{\sigma u},k_{\sigma v}}\,, \\
+%
+	G^\mathrm{func}_{\mathbf{k},\sigma}
+	&= \sum_{\ca{E}_\ca{M}^\mathrm{s}} G_{k_{\sigma u},k_{\sigma v}}
+	+ \sum_{\ca{E}_\ca{M}^\mathrm{d}} (G_\mathrm{d})_{k_{\sigma u},k_{\sigma v}}\,.
+%
+\end{align*}
+%
+Writing out the sum over $\sigma$:
+%
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+	M^\mathrm{func}_{ij}
+	&= \frac{1}{4} \sum_{k=1}^n J^\mathrm{func}_{\mathbf{k},\sigma_1} \ G^\mathrm{func}_{\mathbf{k},\sigma_1} + \frac{1}{4} \sum_{k=1}^n J^\mathrm{func}_{\mathbf{k},\sigma_2} \ G^\mathrm{func}_{\mathbf{k},\sigma_2} + \frac{1}{4} \sum_{k=1}^n J^\mathrm{func}_{\mathbf{k},\sigma_3} \ G^\mathrm{func}_{\mathbf{k},\sigma_3} \\
+%
+	&=         \frac{1}{4} \sum_{k=1}^n J_{ji} J_{jk} (J_\mathrm{d})_{ik} \big(G_{ji} + G_{jk} + (G_\mathrm{d})_{ik}\big) \\
+	& \qquad + \frac{1}{4} \sum_{k=1}^n J_{ij} J_{ik} (J_\mathrm{d})_{jk} \big(G_{ij} + G_{ik} + (G_\mathrm{d})_{jk}\big) \\
+	& \qquad + \frac{1}{4} \sum_{k=1}^n J_{ki} J_{kj} (J_\mathrm{d})_{ij} \big(G_{ki} + G_{kj} + (G_\mathrm{d})_{ij}\big) \\
+%
+	& \\
+	& \\
+	& \\
+&=         \frac{1}{4} J^\top_{ij}         \sum_{k=1}^n (J_\mathrm{d})_{ik} J^\top_{kj} \big(G^\top_{ij} + (G_\mathrm{d})_{ik} + G^\top_{kj}\big) \\
+& \qquad + \frac{1}{4} J_{ij}              \sum_{k=1}^n J_{ik} (J_\mathrm{d})_{kj}      \big(G_{ij} + G_{ik} + (G_\mathrm{d})_{kj}\big) \\
+& \qquad + \frac{1}{4} (J_\mathrm{d})_{ij} \sum_{k=1}^n J^\top_{ik} J_{kj}              \big((G_\mathrm{d})_{ij} + G^\top_{ik} + G_{kj}\big) \,,
+\end{align*}
+\endgroup
+%
+and writing this as a sum of entry-wise and matrix products:
+%
+\begin{align*}
+M^\textrm{func} &= \frac{1}{4} \Big[ J^\top \circ (J_\mathrm{d} G^\top) + J^\top \circ (G_\mathrm{d} J^\top) + G^\top \circ (J_\mathrm{d} J^\top) \Big] \\
+& \qquad + \frac{1}{4} \Big[ J \circ (J G_\mathrm{d}) + J \circ (G J_\mathrm{d}) + G \circ (J J_\mathrm{d}) \Big] \\
+& \qquad + \frac{1}{4} \Big[ J_\mathrm{d} \circ (J^\top G) + J_\mathrm{d} \circ (G^\top J) + G_\mathrm{d} \circ (J^\top J) \Big]
+\end{align*}
+%
+where $A \circ B$ is an entry-wise product and $AB$ is a matrix product. Finally, setting
+$$C = J \circ (J G_\mathrm{d}) + J \circ (G J_\mathrm{d}) + G \circ (J J_\mathrm{d}) + J_\mathrm{d} \circ (J^\top G)\,, $$
+and
+$$ C' = G_\mathrm{d} \circ (J^\top J)\,, $$
+then we have that
+$$ M^\mathrm{func} = \frac{1}{4} \big(C + C^\top + C' \big)\,. $$
+as in Table~\ref{tab:motif_adj_mat_table}, achieved with just five matrix multiplications, nine entry-wise multiplications and nine matrix additions (including the four entry-wise multiplications and four additions needed to construct the adjacency and indicator matrices).
+\end{example}

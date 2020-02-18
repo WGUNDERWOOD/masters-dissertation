@@ -1,0 +1,116 @@
+% Suppress pdf warnings
+\pdfsuppresswarningpagegroup=1
+
+
+
+% From ociamthesis
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Motif\hspace*{0.05cm}-Based Spectral Clustering\\[1ex]   % thesis title
+       of Weighted Directed Networks}        % \\[1ex] is a line break in the title
+
+%\author{Candidate Number: 1005933}
+\author{William George Underwood}
+\college{Department of Statistics}
+
+\renewcommand{\submittedtext}{}
+\degree{Part C Dissertation in Mathematics \& Statistics}
+\degreedate{Trinity 2019}
+%TC:ignore
+
+
+
+
+
+% Environments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}{Proposition}[chapter]
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{example}{Example}[chapter]
+\newtheorem{prf}{Proof}[chapter]
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newtheorem*{notation}{Notation}
+
+
+
+
+
+% Todo Notes
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setuptodonotes{size=\tiny ,tickmarkheight=0.3cm}
+
+
+
+
+
+% Algorithm Options
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\DontPrintSemicolon
+
+% Input output definitions
+\makeatletter
+\renewcommand{\SetKwInOut}[2]{%
+  \sbox\algocf@inoutbox{\KwSty{#2}\algocf@typo:}%
+  \expandafter\ifx\csname InOutSizeDefined\endcsname\relax% if first time used
+    \newcommand\InOutSizeDefined{}\setlength{\inoutsize}{\wd\algocf@inoutbox}%
+    \sbox\algocf@inoutbox{\parbox[t]{\inoutsize}{\KwSty{#2}\algocf@typo:\hfill}~}\setlength{\inoutindent}{\wd\algocf@inoutbox}%
+  \else% else keep the larger dimension
+    \ifdim\wd\algocf@inoutbox>\inoutsize%
+    \setlength{\inoutsize}{\wd\algocf@inoutbox}%
+    \sbox\algocf@inoutbox{\parbox[t]{\inoutsize}{\KwSty{#2}\algocf@typo:\hfill}~}\setlength{\inoutindent}{\wd\algocf@inoutbox}%
+    \fi%
+  \fi% the dimension of the box is now defined.
+  \algocf@newcommand{#1}[1]{%
+    \ifthenelse{\boolean{algocf@inoutnumbered}}{\relax}{\everypar={\relax}}%
+%     {\let\\\algocf@newinout\hangindent=\wd\algocf@inoutbox\hangafter=1\parbox[t]{\inoutsize}{\KwSty{#2}\algocf@typo\hfill:}~##1\par}%
+    {\let\\\algocf@newinout\hangindent=\inoutindent\hangafter=1\parbox[t]{\inoutsize}{\KwSty{#2}\algocf@typo:\hfill}~##1\par}%
+    \algocf@linesnumbered% reset the numbering of the lines
+  }}%
+\makeatother
+
+% Keywords
+\SetKwInOut{Input}{Input}
+\SetKwInOut{Output}{Output}
+\SetKw{In}{in}
+\SetKwProg{Function}{function}{:}{}
+
+% Algorithm comment styles
+\newcommand\commfont[1]{\rmfamily{#1}}
+\SetCommentSty{commfont}
+\SetKwComment{Comm}{$\rhd\ $}{}
+
+% Line spacing
+\AtBeginEnvironment{algorithm}{\setstretch{1.15}}
+
+
+
+% Glossaries
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\glsdescwidth}{0.92\hsize}
+\newglossarystyle{mystyle}{%
+  \setglossarystyle{long}%
+  \renewenvironment{theglossary}%
+     {\begin{longtable}{@{}p{2cm}p{\glsdescwidth}}}%
+     {\end{longtable}}%
+}
+\makeglossaries
+
+
+
+% Macros
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\bb[1]{\mathbb{#1}}
+\newcommand\ca[1]{\mathcal{#1}}
+\newcommand\Aut{\mathrm{Aut}}
+
+% For inputting tables
+\makeatletter\let\expandableinput\@@input\makeatother
+
+%TC:endignore
+
+

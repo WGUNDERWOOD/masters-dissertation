@@ -1,0 +1,33 @@
+\documentclass{standalone}
+\input{../tikz_packages}
+
+\begin{document}
+\begin{tikzpicture}
+
+\SetVertexStyle[LineWidth=1, FillColor=black!15!white, LineColor=black, OuterSep=3, TextFont=\large]
+\SetEdgeStyle[Color=black]
+\SetTextStyle[TextFont=\Large]
+
+\Vertex[label=$\mathcal{V}_1$,size=1]{1}
+\Vertex[x=2,label=$\mathcal{V}_2$,size=1]{2}
+
+\Edge[Direct,lw=0.5,bend=40,position={above=0.1},fontscale=2](1)(2)
+\Edge[Direct,lw=0.5,bend=40,position={below=0.1},fontscale=2](2)(1)
+\Edge[Direct,lw=2,loopposition=180,loopsize=1.5cm,position={left=0.1},fontscale=2](1)(1)
+\Edge[Direct,lw=2,loopposition=0,loopsize=1.5cm,position={right=0.1},fontscale=2](2)(2)
+
+\Text[x=5.3,y=0]{$F = $}
+
+\draw[fill=black!20!white] (6,0) rectangle ++(1,1);
+\draw[fill=black!10!white] (7,0) rectangle ++(1,1);
+\draw[fill=black!10!white] (6,-1) rectangle ++(1,1);
+\draw[fill=black!20!white] (7,-1) rectangle ++(1,1);
+
+\Text[x=6.5,y=0.5]{$p$}
+\Text[x=7.5,y=0.5]{$q$}
+\Text[x=6.5,y=-0.5]{$q$}
+\Text[x=7.5,y=-0.5]{$p$}
+
+
+\end{tikzpicture}
+\end{document}
