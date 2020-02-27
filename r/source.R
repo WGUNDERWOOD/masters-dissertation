@@ -47,6 +47,8 @@ for(package in req_packages){
   require(package, character.only = TRUE)
 }
 
+loadfonts()
+
 # Clear workspace
 rm(list=ls())
 setwd("~/Documents/github/masters-dissertation/r/")
