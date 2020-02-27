@@ -19,6 +19,7 @@ req_packages = c(
   'igraph',
   'jcolors',
   'LICORS',
+  'lwgeom',
   'Matrix',
   'mclust',
   'PRIMME',
@@ -47,7 +48,11 @@ for(package in req_packages){
   require(package, character.only = TRUE)
 }
 
-loadfonts()
+#loadfonts()
+
+# Ghostscript
+#Sys.setenv(R_GSCMD = "/usr/bin/gs")
+
 
 # Clear workspace
 rm(list=ls())
@@ -965,7 +970,6 @@ experimentPolblogs = function(){
   pdf_name = '../results/polblogs/polblogs_network.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=5)
   embed_fonts(pdf_name, outfile=pdf_name)
-  return()
 
 
   # prepare results table and row counter
@@ -1064,9 +1068,9 @@ experimentPolblogs = function(){
   ggsave(filename=pdf_name, plot=pl, width=7, height=5)
   embed_fonts(pdf_name, outfile=pdf_name)
 
-
   cat('\t',capture.output(Sys.time()-t0), sep='')
   cat('\n\n')
+
   return()
 }
 
@@ -1113,9 +1117,9 @@ experimentMigration = function(motif_names, eigenvectors_for_map, n_vects_for_cl
     )
 
   # print pdf
-  #pdf_name = '../results/us_migration/us_migration_map_state_names.pdf'
-  #suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=6, height=4))
-  #embed_fonts(file=pdf_name, outfile=pdf_name)
+  pdf_name = '../results/us_migration/us_migration_map_state_names.pdf'
+  suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=6, height=4))
+  embed_fonts(file=pdf_name, outfile=pdf_name)
 
 
 
@@ -1157,9 +1161,9 @@ experimentMigration = function(motif_names, eigenvectors_for_map, n_vects_for_cl
     file_name = paste('../results/us_migration/sweepClusts_', motif_name, '.txt', sep='')
     write(sweepClusts, file_name, ncolumns=1)
 
-    #pdf_name = paste('../results/us_migration/us_migration_sweep_profile_',motif_name,'.pdf',sep='')
-    #suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=4, height=4))
-    #embed_fonts(pdf_name)
+    pdf_name = paste('../results/us_migration/us_migration_sweep_profile_',motif_name,'.pdf',sep='')
+    suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=4, height=4))
+    embed_fonts(pdf_name)
 
 
     # print vect-coloured maps
@@ -1194,8 +1198,8 @@ experimentMigration = function(motif_names, eigenvectors_for_map, n_vects_for_cl
         )
 
       # print pdf
-      #pdf_name = paste('../results/us_migration/us_migration_',motif_name,'_',i,'.pdf',sep='')
-      #suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=6, height=4))
+      pdf_name = paste('../results/us_migration/us_migration_',motif_name,'_',i,'.pdf',sep='')
+      suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=6, height=4))
     }
 
 
@@ -1223,9 +1227,9 @@ experimentMigration = function(motif_names, eigenvectors_for_map, n_vects_for_cl
       )
 
     # print pdf
-    #pdf_name = paste('../results/us_migration/us_migration_clusts_',motif_name,'.pdf',sep='')
-    #suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=6, height=4))
-    #embed_fonts(pdf_name, outfile=pdf_name)
+    pdf_name = paste('../results/us_migration/us_migration_clusts_',motif_name,'.pdf',sep='')
+    suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=6, height=4))
+    embed_fonts(pdf_name, outfile=pdf_name)
 
   }
 
@@ -1561,7 +1565,6 @@ experimentLanguages = function(eigenvectors_for_map, eigenvectors_for_cluster, n
   world_map = suppressMessages(suppressWarnings(st_crop(world_map, c(xmin=-168.6, xmax=180, ymin=-60, ymax=90))))
 
 
-
   # generate clusters
   set.seed(3596)
   clusts = kmeanspp(vects[,eigenvectors_for_cluster],k=n_clusters_to_print)$cluster
@@ -1591,8 +1594,8 @@ experimentLanguages = function(eigenvectors_for_map, eigenvectors_for_cluster, n
   na_color = '#DDDDDD'
   pl = ggplot(data=world_map, aes(geometry=geometry)) +
     geom_sf(aes(fill=clusts), size=0.05, color='black') +
-    scale_fill_brewer(palette='Set3', na.value=na_color, labels=c(paste('   Cluster',1:6),'   No Cluster')) +
-    coord_sf(crs = st_crs(54030)) +
+    scale_fill_brewer(palette='Set3', na.value=na_color, labels=c(paste('   Cluster',1:6),'   No cluster')) +
+    coord_sf(crs = "+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m no_defs") +
     (theme_diss() +
     theme(panel.background = element_blank(),
           axis.line=element_blank(),
