@@ -1,28 +1,58 @@
 # Run first
 #########################################################################################################################################
-{ # Packages
-  req_packages = c('PRIMME', 'RSpectra', 'igraph', 'LICORS', 'testthat','combinat','Matrix','ggplot2','mclust','R.utils','data.table'
-                  ,'USAboundaries','sf','gtools','ggtern','rstudioapi','grid','jcolors','gdata','devtools','extrafont','rnaturalearth'
-                  ,'cetcolor','rmapshaper','rgeos','RColorBrewer')
-  new_packages = req_packages[!(req_packages %in% installed.packages()[,"Package"])]
-  if(length(new_packages)){
-    install.packages(new_packages)
-  }
-  for(package in req_packages){
-    require(package, character.only = TRUE)
-  }
+# Packages
 
-  if(!('USAboundariesData' %in% installed.packages())){
-    install_github('ropensci/USAboundariesData')
-  }
+# read packages from local directory
+.libPaths("~/R_packages/")
 
-  # Clear workspace
-  rm(list=ls())
-  setwd("C:/Users/Will/Documents/dissertation/r")
+req_packages = c(
+  'cetcolor',
+  'combinat',
+  'data.table',
+  'devtools',
+  'extrafont',
+  'gdata',
+  'ggplot2',
+  'ggtern',
+  'grid',
+  'gtools',
+  'igraph',
+  'jcolors',
+  'LICORS',
+  'Matrix',
+  'mclust',
+  'PRIMME',
+  'R.utils',
+  'RColorBrewer',
+  'rgeos',
+  'rmapshaper',
+  'rnaturalearth',
+  'rstudioapi',
+  'RSpectra',
+  'sf',
+  'testthat',
+  'USAboundaries',
+  'USAboundariesData'
+)
 
-  # Ghostscript
-  Sys.setenv(R_GSCMD = "C:/Program Files/gs/gs9.26/bin/gswin64c.exe")
+new_packages = req_packages[!(req_packages %in% installed.packages()[,"Package"])]
+
+if(length(new_packages)){
+  cat("PLEASE INSTALL THE FOLLOWING PACKAGES:\n")
+  cat(new_packages, sep="\n")
+  cat("\n")
 }
+
+for(package in req_packages){
+  require(package, character.only = TRUE)
+}
+
+# Clear workspace
+rm(list=ls())
+setwd("~/Documents/github/masters-dissertation/r/")
+
+# Ghostscript
+#Sys.setenv(R_GSCMD = "C:/Program Files/gs/gs9.26/bin/gswin64c.exe")
 
 # Generative Models
 #########################################################################################################################################
@@ -706,14 +736,6 @@ theme_diss = function(){
 experimentRunAll = function(){
 
   t00 = Sys.time()
-
-  # Safety check
-  cat('\n')
-  safety_check = readline(prompt="Run all experiments? (yes) ")
-  if(safety_check != 'yes'){
-    stop('Not confirmed. Aborting.')
-  }
-  cat('\n')
 
   # Eigenvector sweep
   experimentEigenvectorSweep()
