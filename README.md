@@ -11,7 +11,8 @@ My master's dissertation
 - Supervisor: Mihai Cucuringu, Department of Statistics, University of Oxford
 
 ## Files
-- Dissertation is [/writeup/main/main.pdf](/writeup/main/main.pdf)
-- Dissertation source is [/writeup/main/main.tex](/writeup/main/main.tex)
-- Build file is [/writeup/build](/writeup/build)
-- Results, including plots and tables, are kept in [/results/](/results/)
+- Dissertation is [writeup/main/main.pdf](/writeup/main/main.pdf)
+- Dissertation TeX source is [writeup/main/main.tex](/writeup/main/main.tex)
+- TeX build file is [writeup/build](/writeup/build)
+- R code can be run with `Rscript r/experiments.R`
+- Results, including plots and tables, are in [results/](/results/)
