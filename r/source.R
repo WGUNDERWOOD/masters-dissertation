@@ -48,18 +48,10 @@ for(package in req_packages){
   require(package, character.only = TRUE)
 }
 
-#loadfonts()
-
-# Ghostscript
-#Sys.setenv(R_GSCMD = "/usr/bin/gs")
-
-
 # Clear workspace
 rm(list=ls())
 setwd("~/Documents/github/masters-dissertation/r/")
 
-# Ghostscript
-#Sys.setenv(R_GSCMD = "C:/Program Files/gs/gs9.26/bin/gswin64c.exe")
 
 # Generative Models
 #########################################################################################################################################
@@ -743,6 +735,7 @@ theme_diss = function(){
 experimentRunAll = function(){
 
   t00 = Sys.time()
+  cat("\n\n\n\n")
 
   # Eigenvector sweep
   experimentEigenvectorSweep()
@@ -762,7 +755,7 @@ experimentRunAll = function(){
   q2s = c(0.05,0.05)
   n_repeats = 20
   set.seed(3193)
-  experimentMotif(ns, ps, q1s, q2s, ps, n_repeats, 'assym')
+  experimentMotif(ns, ps, q1s, q2s, ps, n_repeats, 'asym')
 
   # US Political blogs network
   experimentPolblogs()
@@ -794,7 +787,7 @@ experimentRunAll = function(){
   experimentLanguages(eigenvectors_for_map, eigenvectors_for_cluster, n_clusters_to_print)
 
   # Timings for MAM computation
-  experimentTiming()
+  #experimentTiming()
 
   cat('All experiments run!\n')
   cat(capture.output(Sys.time()-t00), '\n\n')
@@ -807,7 +800,7 @@ experimentMotif = function(ns, p1s, p2s, p3s, p4s, n_repeats, experiment_name){
     cat('Symmetric DSBM\n')
   }
 
-  if(experiment_name == 'assym'){
+  if(experiment_name == 'asym'){
     cat('Asymmetric DSBM\n')
   }
 
@@ -855,7 +848,7 @@ experimentMotif = function(ns, p1s, p2s, p3s, p4s, n_repeats, experiment_name){
         row_number = row_number + 1
 
         # progress
-        cat('\tExperiment ',expmt,'/',n_experiments,', repeat ',rep,'/',n_repeats,', motif ',motif_name,'\t\t\t\r',sep='')
+        cat('\tExperiment ',expmt,'/',n_experiments,', repeat ',rep,'/',n_repeats,', motif ',motif_name,'    \r',sep='')
       }
     }
 
@@ -891,8 +884,8 @@ experimentMotif = function(ns, p1s, p2s, p3s, p4s, n_repeats, experiment_name){
       pdf_name = paste('../results/motifsym/motifsym_',expmt,'.pdf',sep='')
     }
 
-    else if(experiment_name == 'assym'){
-      pdf_name = paste('../results/motifassym/motifassym_',expmt,'.pdf',sep='')
+    else if(experiment_name == 'asym'){
+      pdf_name = paste('../results/motifasym/motifasym_',expmt,'.pdf',sep='')
     }
 
     pl = pl + (theme_diss() +
@@ -904,7 +897,7 @@ experimentMotif = function(ns, p1s, p2s, p3s, p4s, n_repeats, experiment_name){
 
     # print to pdf
     ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-    embed_fonts(pdf_name, outfile=pdf_name)
+    #embed_fonts(pdf_name, outfile=pdf_name)
   }
 
   cat('\n')
@@ -969,7 +962,7 @@ experimentPolblogs = function(){
   # print network plot pdf
   pdf_name = '../results/polblogs/polblogs_network.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-  embed_fonts(pdf_name, outfile=pdf_name)
+  #embed_fonts(pdf_name, outfile=pdf_name)
 
 
   # prepare results table and row counter
@@ -1017,7 +1010,7 @@ experimentPolblogs = function(){
   # print ari/comp plot to pdf
   pdf_name = '../results/polblogs/polblogs_ari_conn.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-  embed_fonts(pdf_name, outfile=pdf_name)
+  #embed_fonts(pdf_name, outfile=pdf_name)
 
 
 
@@ -1051,7 +1044,7 @@ experimentPolblogs = function(){
   # print M12 clusts plot to pdf
   pdf_name = '../results/polblogs/polblogs_M12_clusts.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-  embed_fonts(pdf_name, outfile=pdf_name)
+  #embed_fonts(pdf_name, outfile=pdf_name)
 
   # plot eigs for M12 with truth coloring
   pl = ggplot(data=M12_df, mapping=aes(x=V2, y=V3, color=truth)) +
@@ -1066,7 +1059,7 @@ experimentPolblogs = function(){
   # print M12 truth plot to pdf
   pdf_name = '../results/polblogs/polblogs_M12_truth.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-  embed_fonts(pdf_name, outfile=pdf_name)
+  #embed_fonts(pdf_name, outfile=pdf_name)
 
   cat('\t',capture.output(Sys.time()-t0), sep='')
   cat('\n\n')
@@ -1081,7 +1074,7 @@ experimentMigration = function(motif_names, eigenvectors_for_map, n_vects_for_cl
   t0 = Sys.time()
 
   # read data
-  cat('\tReading data...\n')
+  cat('\tReading data\n')
   Ggraph = readGraphData('us_migration')
   counties = Ggraph$counties
   states = Ggraph$states
@@ -1119,7 +1112,7 @@ experimentMigration = function(motif_names, eigenvectors_for_map, n_vects_for_cl
   # print pdf
   pdf_name = '../results/us_migration/us_migration_map_state_names.pdf'
   suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=6, height=4))
-  embed_fonts(file=pdf_name, outfile=pdf_name)
+  #embed_fonts(file=pdf_name, outfile=pdf_name)
 
 
 
@@ -1163,7 +1156,7 @@ experimentMigration = function(motif_names, eigenvectors_for_map, n_vects_for_cl
 
     pdf_name = paste('../results/us_migration/us_migration_sweep_profile_',motif_name,'.pdf',sep='')
     suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=4, height=4))
-    embed_fonts(pdf_name)
+    #embed_fonts(pdf_name)
 
 
     # print vect-coloured maps
@@ -1229,7 +1222,7 @@ experimentMigration = function(motif_names, eigenvectors_for_map, n_vects_for_cl
     # print pdf
     pdf_name = paste('../results/us_migration/us_migration_clusts_',motif_name,'.pdf',sep='')
     suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=6, height=4))
-    embed_fonts(pdf_name, outfile=pdf_name)
+    #embed_fonts(pdf_name, outfile=pdf_name)
 
   }
 
@@ -1331,7 +1324,7 @@ experimentBipartite = function(ns, p1s, p2s, n_repeats){
         row_number = row_number + 1
 
         # progress
-        cat('\tExperiment ',expmt,'/',n_experiments,', repeat ',rep,'/',n_repeats,', motif ',motif_name,'\t\t\t\r',sep='')
+        cat('\tExperiment ',expmt,'/',n_experiments,', repeat ',rep,'/',n_repeats,', motif ',motif_name,'     \r',sep='')
       }
 
       # run SVD embedding
@@ -1395,7 +1388,7 @@ experimentBipartite = function(ns, p1s, p2s, n_repeats){
     # print to pdf
     pdf_name = paste('../results/bipartite/bipartite',expmt,'.pdf',sep='')
     ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-    embed_fonts(pdf_name, outfile=pdf_name)
+    #embed_fonts(pdf_name, outfile=pdf_name)
   }
 
   cat('\n')
@@ -1453,7 +1446,7 @@ experimentAmericanRevolution = function(){
   # print source clustering pdf
   pdf_name = '../results/american_revolution/american_revolution_source.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-  embed_fonts(pdf_name, outfile=pdf_name)
+  #embed_fonts(pdf_name, outfile=pdf_name)
 
 
 
@@ -1485,7 +1478,7 @@ experimentAmericanRevolution = function(){
   # print dest clustering pdf
   pdf_name = '../results/american_revolution/american_revolution_dest.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-  embed_fonts(pdf_name, outfile=pdf_name)
+  #embed_fonts(pdf_name, outfile=pdf_name)
 
   cat('\t',capture.output(Sys.time()-t0), sep='')
   cat('\n\n')
@@ -1495,7 +1488,7 @@ experimentAmericanRevolution = function(){
 experimentLanguages = function(eigenvectors_for_map, eigenvectors_for_cluster, n_clusters_to_print){
 
   cat('Unicode Languages network\n')
-  cat('\tReading data...\n')
+  cat('\tReading data\n')
 
   t0 = Sys.time()
 
@@ -1618,7 +1611,7 @@ experimentLanguages = function(eigenvectors_for_map, eigenvectors_for_cluster, n
   # save map
   pdf_name = '../results/languages/languages_source_map_clusts.pdf'
   ggsave(filename=pdf_name, plot=pl, width=9, height=3.8)
-  embed_fonts(pdf_name)
+  #embed_fonts(pdf_name)
 
   # record colours used
   clust_cols = c(brewer.pal(6,'Set3'), na_color)
@@ -1822,7 +1815,7 @@ experimentDirectedCP = function(ns, p1s, p2s, n_repeats){
     # print to pdf
     pdf_name = paste('../results/directed_cp/directed_cp',expmt,'.pdf',sep='')
     ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-    embed_fonts(pdf_name, outfile=pdf_name)
+    #embed_fonts(pdf_name, outfile=pdf_name)
   }
 
   print(Sys.time() - t0)
@@ -1867,7 +1860,7 @@ experimentFacultyHiring = function(){
     # print pdf
     pdf_name = paste('../results/faculty_hiring/faculty_hiring_', faculty_id, '.pdf', sep='')
     ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-    embed_fonts(pdf_name, outfile=pdf_name)
+    #embed_fonts(pdf_name, outfile=pdf_name)
 
     # format and print clusters for tex input
     max_length = max(sum(sortClusts==1), sum(sortClusts==2), sum(sortClusts==3), sum(sortClusts==4))
@@ -1955,7 +1948,7 @@ experimentPollination = function(){
   # print source clustering pdf
   pdf_name = '../results/clements_pollination/clements_pollination_source.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=4)
-  embed_fonts(pdf_name, outfile=pdf_name)
+  #embed_fonts(pdf_name, outfile=pdf_name)
 
   # print clusters
   for(i in 1:k){
@@ -1994,7 +1987,7 @@ experimentPollination = function(){
   # print source clustering pdf
   pdf_name = '../results/clements_pollination/clements_pollination_dest.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=4)
-  embed_fonts(pdf_name, outfile=pdf_name)
+  #embed_fonts(pdf_name, outfile=pdf_name)
 
   # print clusters
   for(i in 1:k){
@@ -2053,7 +2046,7 @@ experimentUCIrvine = function(){
   # print source clustering pdf
   pdf_name = '../results/uc_irvine_forum/uc_irvine_forum_source.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=4)
-  embed_fonts(pdf_name, outfile=pdf_name)
+  #embed_fonts(pdf_name, outfile=pdf_name)
 
 
 
@@ -2080,7 +2073,7 @@ experimentUCIrvine = function(){
   # print dest clustering pdf
   pdf_name = '../results/uc_irvine_forum/uc_irvine_forum_dest.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=4)
-  embed_fonts(pdf_name, outfile=pdf_name)
+  #embed_fonts(pdf_name, outfile=pdf_name)
 
   return()
 
@@ -2159,7 +2152,7 @@ experimentEigenvectorSweep = function(){
   # print network plot pdf
   pdf_name = '../results/eigenvector_sweep/eigenvector_sweep_network.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-  embed_fonts(pdf_name, outfile=pdf_name)
+  #embed_fonts(pdf_name, outfile=pdf_name)
 
 
 
@@ -2185,7 +2178,7 @@ experimentEigenvectorSweep = function(){
   # print sweep plot to pdf
   pdf_name = '../results/eigenvector_sweep/eigenvector_sweep_scores.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-  embed_fonts(pdf_name, outfile=pdf_name)
+  #embed_fonts(pdf_name, outfile=pdf_name)
 
   cat('\t',capture.output(Sys.time()-t0), sep='')
   cat('\n\n')
@@ -2195,6 +2188,7 @@ experimentEigenvectorSweep = function(){
 
 experimentTiming = function(){
 
+  cat('Timing\n')
   t0 = Sys.time()
 
   ns = c(100,1000,10000)
@@ -2228,7 +2222,7 @@ experimentTiming = function(){
         results$t[row_number] = time_diff
 
         # progress
-        cat('n = ',n,', p = ',p,', motif = ',motif_name,', time = ',time_diff,'\n', sep='')
+        cat('\tn = ',n,', p = ',p,', motif = ',motif_name,', time = ',time_diff,'\n', sep='')
         row_number = row_number + 1
       }
     }
