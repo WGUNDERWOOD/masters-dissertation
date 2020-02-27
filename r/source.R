@@ -5,6 +5,7 @@
 # read packages from local directory
 .libPaths("~/R_packages/")
 
+# list of required packages
 req_packages = c(
   'cetcolor',
   'combinat',
@@ -36,19 +37,22 @@ req_packages = c(
   'USAboundariesData'
 )
 
+# packages to install
 new_packages = req_packages[!(req_packages %in% installed.packages()[,"Package"])]
 
 if(length(new_packages)){
   cat("PLEASE INSTALL THE FOLLOWING PACKAGES:\n")
   cat(new_packages, sep="\n")
   cat("\n")
+  break
 }
 
+# load packages
 for(package in req_packages){
   require(package, character.only = TRUE)
 }
 
-# Clear workspace
+# clear workspace and set working directory
 rm(list=ls())
 setwd("~/Documents/github/masters-dissertation/r/")
 
@@ -897,7 +901,7 @@ experimentMotif = function(ns, p1s, p2s, p3s, p4s, n_repeats, experiment_name){
 
     # print to pdf
     ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-    #embed_fonts(pdf_name, outfile=pdf_name)
+    embed_fonts(pdf_name, outfile=pdf_name)
   }
 
   cat('\n')
@@ -962,7 +966,7 @@ experimentPolblogs = function(){
   # print network plot pdf
   pdf_name = '../results/polblogs/polblogs_network.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-  #embed_fonts(pdf_name, outfile=pdf_name)
+  embed_fonts(pdf_name, outfile=pdf_name)
 
 
   # prepare results table and row counter
@@ -1010,7 +1014,7 @@ experimentPolblogs = function(){
   # print ari/comp plot to pdf
   pdf_name = '../results/polblogs/polblogs_ari_conn.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-  #embed_fonts(pdf_name, outfile=pdf_name)
+  embed_fonts(pdf_name, outfile=pdf_name)
 
 
 
@@ -1044,7 +1048,7 @@ experimentPolblogs = function(){
   # print M12 clusts plot to pdf
   pdf_name = '../results/polblogs/polblogs_M12_clusts.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-  #embed_fonts(pdf_name, outfile=pdf_name)
+  embed_fonts(pdf_name, outfile=pdf_name)
 
   # plot eigs for M12 with truth coloring
   pl = ggplot(data=M12_df, mapping=aes(x=V2, y=V3, color=truth)) +
@@ -1059,7 +1063,7 @@ experimentPolblogs = function(){
   # print M12 truth plot to pdf
   pdf_name = '../results/polblogs/polblogs_M12_truth.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-  #embed_fonts(pdf_name, outfile=pdf_name)
+  embed_fonts(pdf_name, outfile=pdf_name)
 
   cat('\t',capture.output(Sys.time()-t0), sep='')
   cat('\n\n')
@@ -1112,7 +1116,7 @@ experimentMigration = function(motif_names, eigenvectors_for_map, n_vects_for_cl
   # print pdf
   pdf_name = '../results/us_migration/us_migration_map_state_names.pdf'
   suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=6, height=4))
-  #embed_fonts(file=pdf_name, outfile=pdf_name)
+  embed_fonts(file=pdf_name, outfile=pdf_name)
 
 
 
@@ -1156,7 +1160,7 @@ experimentMigration = function(motif_names, eigenvectors_for_map, n_vects_for_cl
 
     pdf_name = paste('../results/us_migration/us_migration_sweep_profile_',motif_name,'.pdf',sep='')
     suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=4, height=4))
-    #embed_fonts(pdf_name)
+    embed_fonts(pdf_name)
 
 
     # print vect-coloured maps
@@ -1222,7 +1226,7 @@ experimentMigration = function(motif_names, eigenvectors_for_map, n_vects_for_cl
     # print pdf
     pdf_name = paste('../results/us_migration/us_migration_clusts_',motif_name,'.pdf',sep='')
     suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=6, height=4))
-    #embed_fonts(pdf_name, outfile=pdf_name)
+    embed_fonts(pdf_name, outfile=pdf_name)
 
   }
 
@@ -1388,7 +1392,7 @@ experimentBipartite = function(ns, p1s, p2s, n_repeats){
     # print to pdf
     pdf_name = paste('../results/bipartite/bipartite',expmt,'.pdf',sep='')
     ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-    #embed_fonts(pdf_name, outfile=pdf_name)
+    embed_fonts(pdf_name, outfile=pdf_name)
   }
 
   cat('\n')
@@ -1446,7 +1450,7 @@ experimentAmericanRevolution = function(){
   # print source clustering pdf
   pdf_name = '../results/american_revolution/american_revolution_source.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-  #embed_fonts(pdf_name, outfile=pdf_name)
+  embed_fonts(pdf_name, outfile=pdf_name)
 
 
 
@@ -1478,7 +1482,7 @@ experimentAmericanRevolution = function(){
   # print dest clustering pdf
   pdf_name = '../results/american_revolution/american_revolution_dest.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-  #embed_fonts(pdf_name, outfile=pdf_name)
+  embed_fonts(pdf_name, outfile=pdf_name)
 
   cat('\t',capture.output(Sys.time()-t0), sep='')
   cat('\n\n')
@@ -1611,7 +1615,7 @@ experimentLanguages = function(eigenvectors_for_map, eigenvectors_for_cluster, n
   # save map
   pdf_name = '../results/languages/languages_source_map_clusts.pdf'
   ggsave(filename=pdf_name, plot=pl, width=9, height=3.8)
-  #embed_fonts(pdf_name)
+  embed_fonts(pdf_name)
 
   # record colours used
   clust_cols = c(brewer.pal(6,'Set3'), na_color)
@@ -1815,7 +1819,7 @@ experimentDirectedCP = function(ns, p1s, p2s, n_repeats){
     # print to pdf
     pdf_name = paste('../results/directed_cp/directed_cp',expmt,'.pdf',sep='')
     ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-    #embed_fonts(pdf_name, outfile=pdf_name)
+    embed_fonts(pdf_name, outfile=pdf_name)
   }
 
   print(Sys.time() - t0)
@@ -1860,7 +1864,7 @@ experimentFacultyHiring = function(){
     # print pdf
     pdf_name = paste('../results/faculty_hiring/faculty_hiring_', faculty_id, '.pdf', sep='')
     ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-    #embed_fonts(pdf_name, outfile=pdf_name)
+    embed_fonts(pdf_name, outfile=pdf_name)
 
     # format and print clusters for tex input
     max_length = max(sum(sortClusts==1), sum(sortClusts==2), sum(sortClusts==3), sum(sortClusts==4))
@@ -1948,7 +1952,7 @@ experimentPollination = function(){
   # print source clustering pdf
   pdf_name = '../results/clements_pollination/clements_pollination_source.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=4)
-  #embed_fonts(pdf_name, outfile=pdf_name)
+  embed_fonts(pdf_name, outfile=pdf_name)
 
   # print clusters
   for(i in 1:k){
@@ -1987,7 +1991,7 @@ experimentPollination = function(){
   # print source clustering pdf
   pdf_name = '../results/clements_pollination/clements_pollination_dest.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=4)
-  #embed_fonts(pdf_name, outfile=pdf_name)
+  embed_fonts(pdf_name, outfile=pdf_name)
 
   # print clusters
   for(i in 1:k){
@@ -2046,7 +2050,7 @@ experimentUCIrvine = function(){
   # print source clustering pdf
   pdf_name = '../results/uc_irvine_forum/uc_irvine_forum_source.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=4)
-  #embed_fonts(pdf_name, outfile=pdf_name)
+  embed_fonts(pdf_name, outfile=pdf_name)
 
 
 
@@ -2073,7 +2077,7 @@ experimentUCIrvine = function(){
   # print dest clustering pdf
   pdf_name = '../results/uc_irvine_forum/uc_irvine_forum_dest.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=4)
-  #embed_fonts(pdf_name, outfile=pdf_name)
+  embed_fonts(pdf_name, outfile=pdf_name)
 
   return()
 
@@ -2152,7 +2156,7 @@ experimentEigenvectorSweep = function(){
   # print network plot pdf
   pdf_name = '../results/eigenvector_sweep/eigenvector_sweep_network.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-  #embed_fonts(pdf_name, outfile=pdf_name)
+  embed_fonts(pdf_name, outfile=pdf_name)
 
 
 
@@ -2178,7 +2182,7 @@ experimentEigenvectorSweep = function(){
   # print sweep plot to pdf
   pdf_name = '../results/eigenvector_sweep/eigenvector_sweep_scores.pdf'
   ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-  #embed_fonts(pdf_name, outfile=pdf_name)
+  embed_fonts(pdf_name, outfile=pdf_name)
 
   cat('\t',capture.output(Sys.time()-t0), sep='')
   cat('\n\n')
