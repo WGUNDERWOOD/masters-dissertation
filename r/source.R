@@ -108,42 +108,10 @@ sampleBSBM = function(dest_block_sizes, targ_block_sizes, p1, p2){
 #########################################################################################################################################
 runSVDEmb = function(G){
 
-  # TODO check correct
-
-  #n = nrow(G)
-  #rows_to_keep = (1:n)[(apply(G,1,sum)>0)]
-  #cols_to_keep = (1:n)[(apply(G,2,sum)>0)]
-  #A = G[rows_to_keep, cols_to_keep]
-  #invD1 = diag(apply(A,1,sum) ^ (-0.5))
-  #invD2 = diag(apply(A,2,sum) ^ (-0.5))
-
-  #An = invD1 %*% A %*% invD2
-  #AnSVD = svds(An, 2)
-  #u2 = AnSVD$u[,1]
-  #v2 = AnSVD$v[,1]
-  #z2 = c(invD1 %*% u2, invD2 %*% v2)
-
   z2 = runLapEmb(G+t(G),2,'rw')$vects[,2]
 
   return(z2)
 
-}
-
-runHermRW = function(G, l){
-
-  # TODO if needed
-
-  n = nrow(G)
-  A = as.matrix(G - t(G)) * 1i
-  Dinv = diag(apply(Mod(A),1,sum) ^ (-1))
-
-  spect = eigen(Dinv %*% A)
-  inds = 2*(1:k)
-
-  vects = spect$vectors[,inds]
-  print(vects)
-
-  #P =
 }
 
 
@@ -187,9 +155,6 @@ buildIndMats = function(G){
 }
 
 motifAdjCalcs = function(G, Gs, Gd, J, J0, Js, Jd, motif_name){
-
-  # TODO check args - G, J not needed
-  # TODO make func by default
 
   if(motif_name == 'Ms'){
     motifadj = Gs + t(Gs)
@@ -395,22 +360,6 @@ sweepScores = function(G, vector, scoreType=c('cut_size','ratio_cut','n_cut','co
   return(scores)
 }
 
-minSweepPartition = function(G, vector, scoreType=c('cut_size','ratio_cut','n_cut','conductance')){
-
-  # Returns a 2-part partition (in labels vector notation) which minimises the sweep score.
-
-  scoreType = match.arg(scoreType)
-
-  scores = sweepScores(G, vector, scoreType)
-  sorted = sort(vector)
-  cutoff = sorted[which.min(scores)]
-  partLabels = rep(1, length(vector))
-  partLabels[vector > cutoff] = 2
-
-  return(partLabels)
-
-}
-
 minSweepPartition2 = function(G, vector, scores, scoreType=c('cut_size','ratio_cut','n_cut','conductance')){
 
   # Returns a 2-part partition (in labels vector notation) which minimises the sweep score.
@@ -425,61 +374,6 @@ minSweepPartition2 = function(G, vector, scores, scoreType=c('cut_size','ratio_c
 
   return(partLabels)
 
-}
-
-sortMatrix = function(mat, clusts){
-
-  # TODO remove
-
-  # get parameters
-  ans = list()
-  u_clusts = unique(clusts)
-  k = length(u_clusts)
-  n = nrow(mat)
-
-  # randomise inputs
-  samp = sample(1:n, n, replace=FALSE)
-  mat = mat[samp,samp]
-  clusts = clusts[samp]
-
-  i = 1
-  for(perm in permn(u_clusts)){
-
-    perm_func = function(x){return(perm[x])}
-    p_clusts = sapply(clusts, perm_func)
-    inds = order(p_clusts)
-    p_matrix = mat[inds,inds]
-    ans[[i]] = p_matrix
-    i = i+1
-  }
-
-  return(ans)
-
-}
-
-clustDirectedCP = function(G, clusts){
-
-  n = nrow(G)
-  errors = c()
-  perms = permn(c(1,2,3,4))
-
-  for(perm in perms){
-
-    block_sizes = c(sum(clusts == perm[1]),sum(clusts == perm[2]),sum(clusts == perm[3]),sum(clusts == perm[4]))
-    ord = c((1:n)[clusts == perm[1]],(1:n)[clusts == perm[2]],(1:n)[clusts == perm[3]],(1:n)[clusts == perm[4]])
-    truth = sampleDirectedCP(block_sizes,1,0)
-    error = sum(abs(1*(G[ord,ord]>0) - truth))
-    errors = c(errors, error)
-  }
-
-  perm = unlist(perms[which.min(errors)])
-  newClusts = rep(0,n)
-
-  for(i in 1:4){
-    newClusts[clusts == perm[i]] = i
-  }
-
-  return(newClusts)
 }
 
 makeClusterLike = function(clusts, target_clusts){
@@ -615,17 +509,6 @@ scaleVec = function(x){
   return(temp)
 }
 
-simplify_sf = function(sf_object, tol){
-
-  # TODO remove
-
-  temp = methods::as(object = sf_object, Class = "Spatial")
-  temp = gSimplify(temp, tol, topologyPreserve = TRUE)
-  temp = st_as_sf(temp)
-
-  return(temp)
-}
-
 sigfig = function(vec, digits){
 
   return(gsub("\\.$", "", formatC(signif(vec,digits=digits), digits=digits, format="fg", flag="#")))
@@ -717,8 +600,6 @@ runMotifEmb = function(G, motif_name, type, typeLap, numEigs){
 # Plotting
 #########################################################################################################################################
 theme_diss = function(){
-
-  # TODO more in here
 
   temp = theme_bw() +
     theme(plot.title = element_text(hjust=0.5)) +
@@ -1428,7 +1309,7 @@ experimentAmericanRevolution = function(){
   # plot source clustering
   G_graph = graph_from_adjacency_matrix(G)
   set.seed(6548)
-  plotcoord = data.frame(layout.fruchterman.reingold(G_graph)) # TODO add a seed to this layout?
+  plotcoord = data.frame(layout.fruchterman.reingold(G_graph))
   plotcoord$cols = c(as.character(clusts),rep('0',5))
   colnames(plotcoord) = c("X1","X2",'cols')
   edgelist = get.edgelist(G_graph)
@@ -1749,340 +1630,6 @@ experimentLanguages = function(eigenvectors_for_map, eigenvectors_for_cluster, n
   return()
 }
 
-experimentDirectedCP = function(ns, p1s, p2s, n_repeats){
-
-  t0 = Sys.time()
-
-  n_experiments = length(ns)
-  motif_names = c('Ms','M1','M5','M8','M9','M10')
-  plot_motif_names = c('M[italic(s)]','M[1]','M[5]','M[8]','M[9]','M[10]')
-
-  for(expmt in 1:n_experiments){
-
-    # prepare experiment parameters and results tables
-    n = ns[expmt]
-    p1 = p1s[expmt]
-    p2 = p2s[expmt]
-    block_sizes = rep(n,4)
-    truth = c(rep(1,n),rep(2,n),rep(3,n),rep(4,n))
-
-    # prepare results table and row counter
-    resultsColNames = c('Motif','ARI','CompSize')
-    resultsNRows = n_repeats * length(motif_names)
-    results = dataFrameNames(resultsColNames, resultsNRows)
-    row_number = 1
-
-    for(rep in 1:n_repeats){
-
-      # sample the graph
-      G = sampleDirectedCP(block_sizes, p1, p2)
-
-      for(motif_name in motif_names){
-
-        # run algorithm
-        motifEmb = runMotifEmb(G, motif_name, 'func', 'rw', 2)
-        comps = motifEmb$comps
-        vects = motifEmb$vects
-        clusts = kmeanspp(vects[,2],k=4)$cluster
-        randIndex = adjustedRandIndex(clusts,truth[comps])
-
-        # enter results and increment counter
-        results[row_number,1] = motif_name
-        results[row_number,2] = randIndex
-        results[row_number,3] = length(comps)
-        row_number = row_number + 1
-
-        # progress
-        motif_name_print = substr(paste(motif_name,',    ',sep=''),1,5)
-        randIndex_print = substr(paste(round(randIndex,2),'000000',sep=''),1,4)
-        cat('experiment ',expmt,'/',n_experiments,', repeat ',rep,'/',n_repeats,', motif ',motif_name_print,'ARI = ',randIndex_print,'\t\t\t\n',sep='')
-      }
-    }
-
-    # generate mean connected component sizes
-    meanCompSize = data.frame(meanCompSize = round(c(by(results$CompSize, results$Motif, mean))[rank(motif_names)], 1))
-
-    # generate plot
-    pl = ggplot() +
-      geom_boxplot(data=results, mapping=aes(x=Motif, y=ARI), outlier.size=0.5, color='black') +
-      scale_x_discrete(limits=motif_names, labels=parse(text=plot_motif_names)) +
-      xlab('Motif') +
-      ylab('ARI') +
-      coord_cartesian(ylim = c(-0.5,1), clip='off') +
-      geom_text(data=meanCompSize, mapping=aes(x=1:6, y=1.15, label=meanCompSize), family='CM Roman') +
-      ggtitle(as.expression(bquote(italic(n)*" = "*.(n)*", "*italic(p)*" = "*.(p1)*", "*italic(q)*" = "*.(p2)))) +
-      (theme_diss() +
-         theme(plot.title = element_text(vjust=7)) +
-         theme(plot.margin = margin(t=20, r=10, b=0, l=0))) +
-      geom_text(mapping=aes(x=0.2, y=1.14, label='"|"*italic(C)*"| = "'), parse=TRUE, family='CM Roman')
-
-    # print to pdf
-    pdf_name = paste('../results/directed_cp/directed_cp',expmt,'.pdf',sep='')
-    ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-    embed_fonts(pdf_name, outfile=pdf_name)
-  }
-
-  print(Sys.time() - t0)
-  return()
-}
-
-experimentFacultyHiring = function(){
-
-  faculty_ids = c('business','cs','history')
-
-  # loop over business, cs, history
-  for(faculty_num in 1:1){
-
-    # read data
-    faculty_id = faculty_ids[faculty_num]
-    graph_data = readGraphData(paste('faculty_', faculty_id, sep=''))
-    G = graph_data$adj
-    unis = graph_data$unis
-
-    # run algorithm
-    motifEmb = runMotifEmb(G, 'M5', type='func', 'rw', 3)
-    vects = motifEmb$vects
-    comps = motifEmb$comps
-    G = G[comps,comps]
-    unis = unis[comps,]
-
-    clusts = kmeanspp(vects[,2],k=4)$cluster
-    sortClusts = clustDirectedCP(G, clusts)
-
-    # plot
-    df = as.data.frame(vects)
-    df$sortClusts = as.character(sortClusts)
-    pl = ggplot(data=df) +
-      geom_point(aes(x=V2,y=V3,col=sortClusts), alpha=0.6) +
-      scale_color_jcolors(name='Cluster',labels=c('P-out','C-in','C-out','P-in'),palette = 'pal3') +
-      xlab('Eigenvector 2') +
-      ylab('Eigenvector 3') +
-      ggtitle('M5, k-means++') +
-      (theme_diss() +
-         theme(plot.margin = margin(b=2)))
-
-    # print pdf
-    pdf_name = paste('../results/faculty_hiring/faculty_hiring_', faculty_id, '.pdf', sep='')
-    ggsave(filename=pdf_name, plot=pl, width=7, height=5)
-    embed_fonts(pdf_name, outfile=pdf_name)
-
-    # format and print clusters for tex input
-    max_length = max(sum(sortClusts==1), sum(sortClusts==2), sum(sortClusts==3), sum(sortClusts==4))
-    padded_unis = matrix(' ', nrow=max_length, ncol=4)
-
-    for(i in 1:4){
-      padded_unis[(1:sum(sortClusts==i)),i] = sort(as.character(unis$institution[sortClusts==i]))
-    }
-
-    data_string = ''
-
-    for(row_number in 1:max_length){
-      for(i in 1:4){
-        data_string = paste(data_string, padded_unis[row_number,i], '&')
-      }
-
-      data_string = substr(data_string, 1, nchar(data_string)-1)
-      data_string = paste(data_string, '\\\\')
-    }
-
-    data_string = gsub('Texas A&M', 'Texas A and M', data_string)
-    data_string = gsub('University','Uni',data_string)
-    data_string = gsub('Thunderbird School of Global Management','Thunderbird School',data_string)
-    data_string = gsub(', Binghamton','',data_string)
-    data_string = gsub('North Carolina','N. Carolina',data_string)
-    data_string = gsub('Uni of Illinois, Urbana Champaign','Uni of Illinois, UC',data_string)
-    data_string = gsub('Technology','Tech',data_string)
-    data_string = gsub('Polytechnic','Poly',data_string)
-    data_string = substr(data_string, 1, nchar(data_string)-2)
-
-    filename = paste('../results/faculty_hiring/', faculty_id,'.txt', sep='')
-    write(data_string, file=filename)
-
-    # plot network
-    graph_plot = graph_from_adjacency_matrix(G, weighted=TRUE)
-    pdf_name = '../results/faculty_hiring/faculty_network.pdf'
-    pdf(pdf_name)
-    plot(graph_plot, vertex.size=3*apply(G,1,sum)^0.2, edge.width=0.1*edge_attr(graph_plot,'weight'), vertex.label=NA, edge.arrow.size=0.5, edge.arrow.width=0.05, vertex.color=c('pink','blue','red','cyan')[sortClusts])
-    dev.off()
-  }
-
-  return()
-}
-
-experimentPollination = function(){
-
-  # read data
-  graph_data = readGraphData('clements_pollination')
-  G = graph_data$adj
-  pollinators = graph_data$pollinators
-  plants = graph_data$plants
-  n_source = length(pollinators)
-  n_dest = length(plants)
-
-  # cluster source with coll
-  k = 4
-
-  motif_name = 'coll'
-  motifEmb = runMotifEmb(G, motif_name, 'func', 'rw', k)
-  comps = motifEmb$comps
-  vects = motifEmb$vects
-  clusts = kmeanspp(vects[,2:k],k=k)$cluster
-  allClusts = rep(0, n_source)
-  allClusts[comps] = clusts
-
-  # plot source clustering
-  G_graph = graph_from_adjacency_matrix(G, weighted=TRUE)
-  plotcoord = data.frame(layout.fruchterman.reingold(G_graph)) # TODO seed?
-  plotcoord$cols = c(as.character(allClusts),rep(as.character(k+1), n_dest)) # 0: unclustered, k+1: dest
-  colnames(plotcoord) = c("X1","X2",'cols')
-  edgelist = get.edgelist(G_graph)
-  edges = data.frame(plotcoord[edgelist[,1],1:2], plotcoord[edgelist[,2],1:2])
-  colnames(edges) = c("X1","Y1","X2","Y2")
-
-  pl = ggplot() +
-    geom_segment(data=edges, aes(x=X1, y=Y1, xend = X2, yend = Y2), color='gray', size=0.3) +
-    geom_point(aes(x=X1,y=X2,col=cols), data=plotcoord[1:n_source,], size=1) +
-    scale_color_jcolors(palette='pal3', name='Clusters', labels=c('No Cluster',paste(rep('Cluster',k),1:k))) +
-    geom_point(aes(x=X1,y=X2), data=plotcoord[(n_source+1):(n_source+n_dest),], color='black', size=1) +
-    ggtitle(paste('Clustering pollinators into',k,'clusters')) +
-    xlab('') +
-    ylab('') +
-    (theme_diss() + theme(axis.ticks=element_blank(), axis.text=element_blank()))
-
-  # print source clustering pdf
-  pdf_name = '../results/clements_pollination/clements_pollination_source.pdf'
-  ggsave(filename=pdf_name, plot=pl, width=7, height=4)
-  embed_fonts(pdf_name, outfile=pdf_name)
-
-  # print clusters
-  for(i in 1:k){
-    filename = paste('../results/clements_pollination/pollinators_cluster_',i,'.txt', sep='')
-    datatable = pollinators[allClusts==i]
-    datatable = gsub(pattern='&', replacement=' and ', datatable)
-    write.table(datatable, file=filename, row.names=FALSE, col.names=FALSE, quote=FALSE, eol='\\\\')
-  }
-
-
-
-  # cluster dest with expa
-  k = 4
-
-  motif_name = 'expa'
-  motifEmb = runMotifEmb(G, motif_name, 'func', 'rw', k)
-  comps = motifEmb$comps - n_source
-  vects = motifEmb$vects
-  clusts = kmeanspp(vects[,2:k],k=k)$cluster
-  allClusts = rep(0, n_dest)
-  allClusts[comps] = clusts
-
-  # plot dest clustering
-  plotcoord$cols = c(rep(as.character(k+1), nrow(plotcoord)-length(allClusts)),as.character(allClusts))
-
-  pl = ggplot() +
-    geom_segment(data=edges, aes(x=X1, y=Y1, xend = X2, yend = Y2), color='gray', size=0.3) +
-    geom_point(aes(x=X1,y=X2,col=cols), data=plotcoord[(n_source+1):(n_source+n_dest),], size=1) +
-    scale_color_jcolors(palette='pal3', name='Clusters', labels=c('No Cluster',paste(rep('Cluster',k),1:k))) +
-    geom_point(aes(x=X1,y=X2), data=plotcoord[1:n_source,], color='black', size=1) +
-    ggtitle(paste('Clustering plants into',k,'clusters')) +
-    xlab('') +
-    ylab('') +
-    (theme_diss() + theme(axis.ticks=element_blank(), axis.text=element_blank()))
-
-  # print source clustering pdf
-  pdf_name = '../results/clements_pollination/clements_pollination_dest.pdf'
-  ggsave(filename=pdf_name, plot=pl, width=7, height=4)
-  embed_fonts(pdf_name, outfile=pdf_name)
-
-  # print clusters
-  for(i in 1:k){
-    filename = paste('../results/clements_pollination/plants_cluster_',i,'.txt', sep='')
-    datatable = plants[allClusts==i]
-    datatable = gsub(pattern='&', replacement=' and ', datatable)
-    write.table(datatable, file=filename, row.names=FALSE, col.names=FALSE, quote=FALSE, eol='\\\\')
-  }
-
-  return()
-}
-
-experimentUCIrvine = function(){
-
-  # TODO automate magic numbers in bipartite sizes
-
-  source_size = 899
-  dest_size = 522
-
-  # read data
-  graph_data = readGraphData('uc_irvine_forum')
-  G = graph_data$adj
-
-  # cluster source with coll
-  motif_name = 'coll'
-  motifEmb = runMotifEmb(G, motif_name, 'func', 'rw', 5)
-  comps = motifEmb$comps
-  vects = motifEmb$vects
-  clusts = kmeanspp(vects[,2:5],k=5)$cluster
-
-  print(length(comps))
-
-  # plot source clustering
-  G_graph = graph_from_adjacency_matrix(G)
-  plotcoord = data.frame(layout.fruchterman.reingold(G_graph)) # TODO add a seed to this layout?
-  print('here')
-
-  plotcoord$cols = c(as.character(clusts),rep('0', dest_size))
-
-  colnames(plotcoord) = c("X1","X2",'cols')
-  edgelist = get.edgelist(G_graph)
-  edges = data.frame(plotcoord[edgelist[,1],1:2], plotcoord[edgelist[,2],1:2])
-  colnames(edges) = c("X1","Y1","X2","Y2")
-
-
-  pl = ggplot() +
-    geom_segment(data=edges, aes(x=X1, y=Y1, xend = X2, yend = Y2), color='gray', size=0.5) +
-    #geom_point(aes(x=X1,y=X2,col=cols), data=plotcoord[1:136,], size=2) +
-    scale_color_jcolors(palette='pal3', name='Clusters', labels=c('Cluster 1','Cluster 2','Cluster 3','Cluster 4','Cluster 5')) +
-    #geom_point(aes(x=X1,y=X2), data=plotcoord[137:141,], color='black', size=2) +
-    ggtitle('Clustering people into 5 clusters') +
-    xlab('') +
-    ylab('') +
-    (theme_diss() + theme(axis.ticks=element_blank(), axis.text=element_blank()))
-
-  # print source clustering pdf
-  pdf_name = '../results/uc_irvine_forum/uc_irvine_forum_source.pdf'
-  ggsave(filename=pdf_name, plot=pl, width=7, height=4)
-  embed_fonts(pdf_name, outfile=pdf_name)
-
-
-
-  # cluster dest with expa
-  motif_name = 'expa'
-  motifEmb = runMotifEmb(G, motif_name, 'func', 'rw', 2)
-  comps = motifEmb$comps
-  vects = motifEmb$vects
-  clusts = kmeanspp(vects[,2],k=2)$cluster
-
-  # plot dest clustering
-  plotcoord$cols = c(rep('0',136),as.character(clusts))
-
-  pl = ggplot() +
-    geom_segment(data=edges, aes(x=X1, y=Y1, xend = X2, yend = Y2), color='gray', size=0.5) +
-    geom_point(aes(x=X1,y=X2,col=cols), data=plotcoord[137:141,], size=2) +
-    scale_color_jcolors(palette='pal3', name='Clusters', labels=c('Cluster 1','Cluster 2')) +
-    geom_point(aes(x=X1,y=X2), data=plotcoord[1:136,], color='black', size=2) +
-    ggtitle('Clustering organisations into 2 clusters') +
-    xlab('') +
-    ylab('') +
-    (theme_diss() + theme(axis.ticks=element_blank(), axis.text=element_blank()))
-
-  # print dest clustering pdf
-  pdf_name = '../results/uc_irvine_forum/uc_irvine_forum_dest.pdf'
-  ggsave(filename=pdf_name, plot=pl, width=7, height=4)
-  embed_fonts(pdf_name, outfile=pdf_name)
-
-  return()
-
-}
-
 experimentEigenvectorSweep = function(){
 
   cat('Eigenvector sweep\n')
@@ -2269,61 +1816,15 @@ experimentTiming = function(){
 readGraphData = function(graphname){
 
   # Reads the sample data available for this project, as a list containing (weighted) adjacency matrix and other attributes
-  # TODO use fread
 
-  if(graphname == 'us_canada_airlines'){ans = read_us_canada_airlines()}
-  else if(graphname == 'karate_club'){ans = read_karate_club()}
-  else if(graphname == 'us_airports'){ans = read_us_airports()}
-  else if(graphname == 'polblogs'){ans = read_polblogs()}
-  else if(graphname == 'hessen_roads'){ans = read_hessen_roads()}
-  else if(graphname == 'uk_roads'){ans = read_uk_roads()}
+  if(graphname == 'polblogs'){ans = read_polblogs()}
   else if(graphname == 'us_migration'){ans = read_us_migration()}
-  else if(graphname == 'oldenburg'){ans = read_oldenburg()}
   else if(graphname == 'american_revolution'){ans = read_american_revolution()}
-  else if(graphname == 'faculty_business'){ans = read_faculty_business()}
-  else if(graphname == 'faculty_cs'){ans = read_faculty_cs()}
-  else if(graphname == 'faculty_history'){ans = read_faculty_history()}
-  else if(graphname == 'clements_pollination'){ans = read_clements_pollination()}
-  else if(graphname == 'uc_irvine_forum'){ans = read_uc_irvine_forum()}
   else if(graphname == 'languages'){ans = read_languages()}
 
   else(stop('Invalid graph name'))
   return(ans)
 
-}
-
-read_us_canada_airlines = function(){
-
-  df = read.csv('../datasets/us_canada_airlines/us_canada_airlines.csv',sep = ' ')
-  cities = unname(unlist(fread('../datasets/us_canada_airlines/us_canada_airlines_names.csv',sep = '\n', header=FALSE,data.table=FALSE)))
-  gr = graph.data.frame(df)
-
-  ans = list()
-  ans$adj = as_adj(gr, attr='similarity')
-  ans$cities = cities
-  return(ans)
-}
-
-read_karate_club = function(){
-  gr = read_graph('../datasets/karate_club/karate_club.gml', format = 'gml')
-
-  ans = list()
-  ans$adj = as_adj(gr)
-  return(ans)
-}
-
-read_us_airports = function(){
-
-  df = read.csv('../datasets/us_airports/us_airports.csv',sep = ' ')
-  all_airports = read.csv('../datasets/us_airports/us_airports_names.csv',sep = ' ')
-  gr = graph.data.frame(df)
-  vertex_list = sort(unique(as.numeric(vertex_attr(gr,'name'))))
-  used_airports = as.character((all_airports[vertex_list,])$airport_code)
-
-  ans = list()
-  ans$adj = as_adj(gr, attr='similarity')
-  ans$airports = used_airports
-  return(ans)
 }
 
 read_polblogs = function(){
@@ -2334,31 +1835,6 @@ read_polblogs = function(){
   ans$adj = as_adj(gr)
   ans$labels = vertex_attr(gr,'value')
   ans$source = vertex_attr(gr,'source')
-  return(ans)
-}
-
-read_hessen_roads = function(){
-
-  df = read.csv('../datasets/hessen_roads/hessen_roads.csv',sep = '\t')
-  gr = graph.data.frame(df)
-
-  ans = list()
-  ans$adj = as_adj(gr, attr='Capacity')
-  ans$length = edge_attr(gr,'Length')
-  return(ans)
-}
-
-read_uk_roads = function(){
-
-  # TODO
-  df = fread('../datasets/uk_roads/uk_roads.csv',data.table=FALSE,nrows = 100000)
-  df = df[df$`Region Name (GO)` == 'Wales',]
-  print(df[1,])
-
-  gr = graph.data.frame(df[])
-
-  ans = list()
-  ans = df
   return(ans)
 }
 
@@ -2485,17 +1961,6 @@ read_us_migration = function(){
   return(ans)
 }
 
-read_oldenburg = function(){
-
-  df = fread('../datasets/oldenburg/oldenburg_edges.txt',data.table=FALSE,sep = ' ')
-  df = df[,2:4]
-  gr = graph.data.frame(df)
-
-  ans = list()
-  ans$adj = unname(as_adj(gr, attr='length'))
-  return(ans)
-}
-
 read_american_revolution = function(){
 
   df = fread('../datasets/american_revolution/american_revolution.csv',data.table=FALSE,sep = ',')
@@ -2503,87 +1968,6 @@ read_american_revolution = function(){
 
   ans = list()
   ans$adj = unname(as_adj(gr))
-  return(ans)
-}
-
-read_faculty_business = function(){
-
-  # read edge list
-  edge_list = fread('../datasets/faculty_hiring/business/Business_edgelist.txt',data.table=FALSE,sep = '\t')
-  edge_list = edge_list[,1:2]
-  unis = read.csv('../datasets/faculty_hiring/business/Business_vertexlist.txt', sep='\t')
-
-  # adj
-  adj = adj_from_edge_list(edge_list)
-
-  ans = list()
-  ans$adj = adj
-  ans$unis = unis
-  return(ans)
-
-}
-
-read_faculty_cs = function(){
-
-  df = fread('../datasets/faculty_hiring/cs/ComputerScience_edgelist.txt',data.table=FALSE,sep = '\t')
-  unis = read.csv('../datasets/faculty_hiring/cs/ComputerScience_vertexlist.txt', sep='\t')
-  gr = graph.data.frame(df,vertices = unis$u)
-  ord = order(as.numeric(vertex_attr(gr,'name')))
-  named = 1:(length(ord)-1)
-
-  ans = list()
-  ans$adj = drop0_killdiag(unname(as_adj(gr))[ord,ord])[named,named]
-  ans$unis = unis[named,]
-  return(ans)
-
-}
-
-read_faculty_history = function(){
-
-  df = fread('../datasets/faculty_hiring/history/History_edgelist.txt',data.table=FALSE,sep = '\t')
-  unis = read.csv('../datasets/faculty_hiring/history/History_vertexlist.txt', sep='\t')
-  gr = graph.data.frame(df,vertices = unis$u)
-  ord = order(as.numeric(vertex_attr(gr,'name')))
-  named = 1:(length(ord)-1)
-
-  ans = list()
-  ans$adj = drop0_killdiag(unname(as_adj(gr))[ord,ord])[named,named]
-  ans$unis = unis[named,]
-  return(ans)
-
-}
-
-read_clements_pollination = function(){
-
-  df = fread('../datasets/clements_pollination/clements_1923.csv',data.table=FALSE,sep = ',')
-
-  Pl_ge = df[2,5:100]
-  Pl_sp = df[3,5:100]
-  Pol_ge = df[5:279,2]
-  Pol_sp = df[5:279,3]
-
-  pollinators = paste(Pol_ge, Pol_sp)
-  plants = paste(Pl_ge, Pl_sp)
-
-  small_adj = matrix(as.numeric(as.matrix(df[5:279,5:100])), nrow=275)
-  adj = matrix(0, nrow=371, ncol=371)
-  adj[1:275,276:371] = small_adj
-
-  ans = list()
-  ans$adj = drop0(adj)
-  ans$pollinators = pollinators
-  ans$plants = plants
-
-  return(ans)
-}
-
-read_uc_irvine_forum = function(){
-
-  df = fread('../datasets/uc_irvine_forum/uc_irvine_forum.txt',data.table=FALSE,sep = ' ')
-  gr = graph.data.frame(df)
-
-  ans = list()
-  ans$adj = drop0_killdiag(unname(as_adj(gr, attr='V3')))
   return(ans)
 }
 
