@@ -952,7 +952,7 @@ experimentPolblogs = function(){
   return()
 }
 
-experimentMigration = function(motif_names, eigenvectors_for_map, n_vects_for_cluster, n_clusters, simplify_sweep){
+experimentMigration = function(motif_names, eigenvectors_for_map, n_vects_for_cluster, n_clusters, simplify_sweep, weighted){
 
   cat('US Migration network\n')
 
@@ -973,31 +973,37 @@ experimentMigration = function(motif_names, eigenvectors_for_map, n_vects_for_cl
   G = G*(G <= 1e4) + 1e4*(G > 1e4)
   G = drop0(G)
 
+  # drop weights if unweighted
+  if(!weighted){
+    G = as.numeric(G > 0)
+    G = drop0(G)
+  }
+
 
   # plot map with states labelled
-  cat('\tPlotting reference map\n')
-  pl = ggplot() +
-    geom_sf(data=states, color='black', size=0.2, aes(geometry=geometry, fill=shading)) +
-    scale_fill_manual(values=c('white','gray92','gray84','gray75')) +
-    coord_sf(crs = st_crs(2163)) +
-    geom_text(data=states, aes(x=X, y=Y, label=abbr_name), family='CM Roman', size=states$label_sizes) +
-    geom_segment(data=states, aes(x=label_line_x, xend=label_line_xend, y=label_line_y, yend=label_line_yend), size=0.15, color='black') +
-    theme(panel.background = element_blank(),
-          axis.line=element_blank(),
-          axis.title.x=element_blank(),
-          axis.title.y=element_blank(),
-          axis.text.x=element_blank(),
-          axis.text.y=element_blank(),
-          axis.ticks.x=element_blank(),
-          axis.ticks.y=element_blank(),
-          plot.margin = margin(t=0, r=0, b=0, l=0),
-          legend.position='none'
-    )
-
-  # print pdf
-  pdf_name = '../results/us_migration/us_migration_map_state_names.pdf'
-  suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=6, height=4))
-  embed_fonts(file=pdf_name, outfile=pdf_name)
+  #cat('\tPlotting reference map\n')
+  #pl = ggplot() +
+    #geom_sf(data=states, color='black', size=0.2, aes(geometry=geometry, fill=shading)) +
+    #scale_fill_manual(values=c('white','gray92','gray84','gray75')) +
+    #coord_sf(crs = st_crs(2163)) +
+    #geom_text(data=states, aes(x=X, y=Y, label=abbr_name), family='CM Roman', size=states$label_sizes) +
+    #geom_segment(data=states, aes(x=label_line_x, xend=label_line_xend, y=label_line_y, yend=label_line_yend), size=0.15, color='black') +
+    #theme(panel.background = element_blank(),
+          #axis.line=element_blank(),
+          #axis.title.x=element_blank(),
+          #axis.title.y=element_blank(),
+          #axis.text.x=element_blank(),
+          #axis.text.y=element_blank(),
+          #axis.ticks.x=element_blank(),
+          #axis.ticks.y=element_blank(),
+          #plot.margin = margin(t=0, r=0, b=0, l=0),
+          #legend.position='none'
+    #)
+#
+  ## print pdf
+  #pdf_name = '../results/us_migration/us_migration_map_state_names.pdf'
+  #suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=6, height=4))
+  #embed_fonts(file=pdf_name, outfile=pdf_name)
 
 
 
@@ -1025,23 +1031,23 @@ experimentMigration = function(motif_names, eigenvectors_for_map, n_vects_for_cl
 
 
     # plot sweep profiles
-    sweep_scores = sweepScores(G, vects[,2], 'n_cut', simplify_sweep)
-    sweep_profile = data.frame(x=1:length(sweep_scores), y=sweep_scores)
-    sweepClusts = minSweepPartition2(G, vects[,2], sweep_scores, 'n_cut')
-    pl = ggplot(data=sweep_profile, aes(x=x,y=y)) +
-      geom_line() +
-      ggtitle('') +
-      xlab(as.expression(bquote('Splitting point'))) +
-      ylab('Ncut score') +
-      scale_y_continuous(limits=c(0,0.5)) +
-      (theme_diss() + theme(plot.margin = margin(t=-5,r=10,b=5)))
-
-    file_name = paste('../results/us_migration/sweepClusts_', motif_name, '.txt', sep='')
-    write(sweepClusts, file_name, ncolumns=1)
-
-    pdf_name = paste('../results/us_migration/us_migration_sweep_profile_',motif_name,'.pdf',sep='')
-    suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=4, height=4))
-    embed_fonts(pdf_name)
+    #sweep_scores = sweepScores(G, vects[,2], 'n_cut', simplify_sweep)
+    #sweep_profile = data.frame(x=1:length(sweep_scores), y=sweep_scores)
+    #sweepClusts = minSweepPartition2(G, vects[,2], sweep_scores, 'n_cut')
+    #pl = ggplot(data=sweep_profile, aes(x=x,y=y)) +
+      #geom_line() +
+      #ggtitle('') +
+      #xlab(as.expression(bquote('Splitting point'))) +
+      #ylab('Ncut score') +
+      #scale_y_continuous(limits=c(0,0.5)) +
+      #(theme_diss() + theme(plot.margin = margin(t=-5,r=10,b=5)))
+#
+    #file_name = paste('../results/us_migration/sweepClusts_', motif_name, '.txt', sep='')
+    #write(sweepClusts, file_name, ncolumns=1)
+#
+    #pdf_name = paste('../results/us_migration/us_migration_sweep_profile_',motif_name,'.pdf',sep='')
+    #suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=4, height=4))
+    #embed_fonts(pdf_name)
 
 
     # print vect-coloured maps
@@ -1076,7 +1082,8 @@ experimentMigration = function(motif_names, eigenvectors_for_map, n_vects_for_cl
         )
 
       # print pdf
-      pdf_name = paste('../results/us_migration/us_migration_',motif_name,'_',i,'.pdf',sep='')
+      #pdf_name = paste('../results/us_migration/us_migration_',motif_name,'_',i,'.pdf',sep='')
+      pdf_name = paste('../results/us_migration/us_migration_',motif_name,'_',i,'_',weighted,'.pdf',sep='')
       suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=6, height=4))
     }
 
@@ -1105,7 +1112,7 @@ experimentMigration = function(motif_names, eigenvectors_for_map, n_vects_for_cl
       )
 
     # print pdf
-    pdf_name = paste('../results/us_migration/us_migration_clusts_',motif_name,'.pdf',sep='')
+    pdf_name = paste('../results/us_migration/us_migration_clusts_',motif_name,'_',weighted,'.pdf',sep='')
     suppressWarnings(ggsave(filename=pdf_name, plot=pl, width=6, height=4))
     embed_fonts(pdf_name, outfile=pdf_name)
 
