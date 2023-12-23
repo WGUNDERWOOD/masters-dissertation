@@ -4,9 +4,9 @@
 %	,draft
 ]{ociamthesis}
 
-\include{packages}
-\include{preamble}
-\include{glossary}
+\input{packages}
+\input{preamble}
+\input{glossary}
 
 % DOCUMENT
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -26,40 +26,39 @@
 
 \pagenumbering{Alph}
 %TC:endignore
-\maketitle                
+\maketitle
 %TC:ignore
 %\newpage\null\thispagestyle{empty}\newpage
 %TC:endignore
-\include{abstract}       
+\include{abstract}
 %TC:ignore
 %\newpage\null\thispagestyle{empty}\newpage
 
-
 \pagenumbering{arabic}
-\begin{romanpages}          
+\begin{romanpages}
 
-\tableofcontents        
+\tableofcontents
 
 \newpage
-\listoffigures        
+\listoffigures
 
 \newpage
 \listoftables
 
-\begingroup	
+\begingroup
 	\let\cleardoublepage\relax
 	\let\clearpage\relax
 	\printglossary[title=Abbreviations, style=mystyle]
 \endgroup
 
-\end{romanpages}           
+\end{romanpages}
 
 
 
 % Fancy headers
 \pagestyle{fancy}
 \renewcommand{\chaptermark}[1]{\markboth{#1}{}}
-\fancyhead[RO,LE]{\itshape{\nouppercase{Chapter \thechapter : \leftmark}}}
+\fancyhead[RO]{\itshape{\nouppercase{Chapter \thechapter : \leftmark}}}
 
 %TC:endignore
 \include{introduction}
@@ -72,7 +71,7 @@
 
 % enable appendix numbering format and include appendices
 \appendix
-\fancyhead[RO,LE]{\itshape{\nouppercase{Appendix \thechapter : \leftmark}}}
+\fancyhead[RO]{\itshape{\nouppercase{Appendix \thechapter : \leftmark}}}
 
 %TC:endignore
 \include{appendix_proofs}
@@ -88,7 +87,7 @@
 % change bibliography name to References
 \renewcommand{\bibname}{References}
 \pagestyle{fancy}
-\fancyhead[RO,LE]{\itshape{\nouppercase{References}}}
+\fancyhead[RO]{\itshape{\nouppercase{References}}}
 \bibliography{refs}        % use a bibtex bibliography file refs.bib
 \bibliographystyle{abbrv}  % use the plain bibliography style
 %\newpage\null\thispagestyle{empty}\newpage
